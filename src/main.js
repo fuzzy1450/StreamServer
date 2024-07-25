@@ -62,6 +62,9 @@ app.get('/init', (req, res) => {
 })
 
 app.get('/oauth', (req,res)=>{
+	if(!req.query.code){
+		res.redirect('/init')
+	}
 	ytcode = req.query.code
 	
 	console.log(ytcode)
@@ -135,6 +138,9 @@ app.get('/golive/:camID', async (req,res)=>{
 		  id: broadcastId,
 		  streamId: streamId
 		});
+
+
+		//TODO update stream 
 		
 		let StreamKey = streamResponse.data.cdn.ingestionInfo.streamName
 		let Addr = streamResponse.data.cdn.ingestionInfo.ingestionAddress
@@ -166,15 +172,16 @@ async function StartStream(StreamKey, StreamAddr, Source){
 	
 	proc = spawn('ffmpeg.exe', [
 		'-hwaccel', 'cuda',
+		'-rtsp_transport', 'tcp',
 		'-r', '25',
 		'-i', Source,
 		'-c:v', 'hevc_nvenc', 
 		'-b:v', '6200k',
 		'-pix_fmt', 'yuv420p',
 		'-c:a', 'aac',
-		'-r', '25',
+		'-r', '30',
 		'-f', 'flv',
-		destination,
+		destination
         
     ]);
 	if(proc.error) {
