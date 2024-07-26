@@ -211,7 +211,7 @@ async function StartStream(StreamKey, StreamAddr, Source){
 	destination = StreamAddr+'/'+StreamKey
 	console.log(`Starting Stream to [${destination}]`)
 	
-	proc = spawn('ffmpeg.exe', [
+	args = [
 		'-loglevel', 'error',
 		'-hwaccel', 'cuda',
 		'-rtsp_transport', 'tcp',
@@ -219,14 +219,16 @@ async function StartStream(StreamKey, StreamAddr, Source){
 		'-i', Source,
 		'-vf', "minterpolate='fps=60'",
 		'-c:v', 'hevc_nvenc', 
+		'-preset', 'ultrafast',
 		'-b:v', '6200k',
 		'-pix_fmt', 'yuv420p',
 		'-c:a', 'aac',
-		'-r', '30',
+		'-r', '60',
 		'-f', 'flv',
 		destination
-        
-    ]);
+    ]
+	console.log(`Spawning FFMPEG ${args.join(" ")}`)
+	proc = spawn('ffmpeg.exe', args);
 	proc.stdout.on('data', (data) => {
 		console.log(`FFMPEG o: ${data}`);
 	});
