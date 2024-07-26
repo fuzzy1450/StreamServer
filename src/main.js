@@ -179,9 +179,14 @@ app.get('/golive/:camID', async (req,res)=>{
 		let Addr = streamResponse.data.cdn.ingestionInfo.ingestionAddress
 		
 		
-		StartStream(StreamKey, Addr, req.param("camID"))
+		StartStream(StreamKey, Addr, req.params["camID"])
+		console.log('FFMPEG is running');
 		
-		console.log('Livestream created successfully!');
+		
+		
+		
+		await TransitionStream(youtube, broadcastId)
+		
 		res.redirect(`http://youtube.com/watch?v=${broadcastResponse.data.id}`)
 	} 
 	catch (error) {
