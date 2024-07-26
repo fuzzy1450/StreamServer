@@ -76,18 +76,17 @@ app.get('/init', (req, res) => {
 	res.redirect(authorizationUrl)
 })
 
-app.get('/oauth', (req,res)=>{
+app.get('/oauth', async (req,res)=>{
 	if(!req.query.code){
 		res.redirect('/init')
 	}
 	ytcode = req.query.code
+
+	const { tokens } = await oauth2Client.getToken(ytcode);
+	oauth2Client.setCredentials(tokens);
 	
 	console.log(ytcode)
-	res.send(`<h1>Which one should go live?</h1>
-			<a href='/golive/1'>Camera 1</a>
-			<br>
-			<a href='/golive/2'>Camera 2</a>
-	`)
+	res.redirect('/golive')
 })
 app.get('/golive', (req,res)=>{
 	if(ytcode){
@@ -110,8 +109,6 @@ app.get('/golive/:camID', async (req,res)=>{
 	console.log("Initiating the Stream Process...")
 	
 	try {
-		const { tokens } = await oauth2Client.getToken(ytcode);
-		oauth2Client.setCredentials(tokens);
 
 		// Create live broadcast
 		const youtube = google.youtube({ version: 'v3', auth: oauth2Client });
