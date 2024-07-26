@@ -100,6 +100,26 @@ app.get('/golive', (req,res)=>{
 	}
 })
 
+async function TransitionStream(youtube, broadcastId, retry=0){
+	await sleep(10000)
+	return youtube.liveBroadcasts.transition({
+		part: 'id,status',
+		id: broadcastId,
+		broadcastStatus: 'live',
+	})
+	.then((res)=>{
+		console.log(`Transitioned Stream after ${retry} attempts.`)
+		return res
+	})
+	.catch(async (err)=>{
+		if(retry<10){
+			return TransitionStream(youtube, broadcastId, retry+1)
+		} else {
+			console.log(`Failed to launch stream [${broadcastId}]`)
+			throw new Error(err)
+		}
+	})
+}
 
 app.get('/golive/:camID', async (req,res)=>{
 	if(!ytcode){
