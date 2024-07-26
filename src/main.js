@@ -16,11 +16,22 @@ const certificate = fs.readFileSync('auth/selfsign.crt', 'utf8');
 const credentials = {key: privateKey, cert: certificate};
  
 const secrets = require("auth/client_secrets.json");
+let ytcode = null
 const oauth2Client = new google.auth.OAuth2(
 	secrets.web.client_id,
 	secrets.web.client_secret,
 	secrets.web.redirect_uris[0]
 );
+
+oauth2Client.on('tokens', (tokens) => {
+	console.log(tokens)
+	if (tokens.refresh_token) {
+		oauth2Client.setCredentials({
+			refresh_token: `STORED_REFRESH_TOKEN`
+		});
+	}
+	ytcode=tokens.access_token
+});
 
 
 const app = express()
@@ -30,9 +41,6 @@ app.use(session({
 	saveUninitialized: true,
 	cookie: { secure: true }
 }))
-
-let ytcode = null
-
 
 
 app.set('view engine', 'ejs');
