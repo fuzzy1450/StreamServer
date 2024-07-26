@@ -126,6 +126,7 @@ app.get('/golive/:camID', async (req,res)=>{
 		res.redirect('/init')
 		return
 	}
+	
 	console.log("Initiating the Stream Process...")
 	
 	try {
@@ -171,8 +172,8 @@ app.get('/golive/:camID', async (req,res)=>{
 		  streamId: streamId
 		});
 
-
-		//TODO update stream 
+		
+		
 		
 		let StreamKey = streamResponse.data.cdn.ingestionInfo.streamName
 		let Addr = streamResponse.data.cdn.ingestionInfo.ingestionAddress
@@ -188,6 +189,7 @@ app.get('/golive/:camID', async (req,res)=>{
 		res.status(500).send('Error creating livestream');
 	}
 })
+
 
 async function StartStream(StreamKey, StreamAddr, Source){
 	
