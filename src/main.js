@@ -101,7 +101,7 @@ app.get('/golive', (req,res)=>{
 })
 
 async function TransitionStream(youtube, broadcastId, retry=0){
-	await sleep(10000+(2000*retry))
+	await sleep(20000+(2000*retry))
 	console.log("Attempting Stream Transition...")
 	return youtube.liveBroadcasts.transition({
 		part: 'id,status',
@@ -187,9 +187,11 @@ app.get('/golive/:camID', async (req,res)=>{
 		
 		
 		
-		await TransitionStream(youtube, broadcastId)
+		
 		
 		res.redirect(`http://youtube.com/watch?v=${broadcastResponse.data.id}`)
+
+		await TransitionStream(youtube, broadcastId)
 	} 
 	catch (error) {
 		console.error('Error creating livestream:', error);
@@ -219,10 +221,11 @@ async function StartStream(StreamKey, StreamAddr, Source){
 		'-i', Source,
 		'-c:v', 'hevc_nvenc', 
 		'-preset', 'fast',
-		'-filter_complex', '"[0:v]hwupload_cuda,scale_cuda=1920:1080:format=yuv420p,fps=30"',
+		'-filter_complex', "[0:v]hwupload_cuda,scale_cuda=1920:1080:format=yuv420p,fps=45",
 		'-g', '60',
 		'-c:a', 'aac',
 		'-f', 'flv',
+		'-rtmp_buffer', '5000',
 		destination
     ]
 	console.log(`Spawning FFMPEG ${args.join(" ")}`)
