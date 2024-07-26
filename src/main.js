@@ -34,6 +34,13 @@ oauth2Client.on('tokens', (tokens) => {
 });
 
 
+// a simple sleep function. Should probably be in a module.
+function sleep(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+
+
 const app = express()
 app.use(session({
 	secret: crypto.randomBytes(32).toString('hex'),
