@@ -210,6 +210,7 @@ async function StartStream(StreamKey, StreamAddr, Source){
 	console.log(`Starting Stream to [${destination}]`)
 	
 	proc = spawn('ffmpeg.exe', [
+		'-loglevel', 'error',
 		'-hwaccel', 'cuda',
 		'-rtsp_transport', 'tcp',
 		'-r', '25',
