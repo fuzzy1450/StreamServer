@@ -225,11 +225,6 @@ async function StartStream(StreamKey, StreamAddr, Source){
 		destination
         
     ]);
-	if(proc.error) {
-		console.log("ERROR: ",child.error);
-	}
-	
-	console.log("FFMPEG Running...")
 	proc.stdout.on('data', (data) => {
 		console.log(`FFMPEG o: ${data}`);
 	});
@@ -239,7 +234,14 @@ async function StartStream(StreamKey, StreamAddr, Source){
 	proc.on('close', (code) => {
 		console.log(`FFMPEG process exited with code ${code}`);
 	}); 
-	console.log(proc)
+	
+	
+	if(proc.error) {
+		console.warn("Error Launching FFMPEG")
+		throw new Error(child.error);
+	}
+	
+	return proc
 }
 
 const httpServer = http.createServer(app);
