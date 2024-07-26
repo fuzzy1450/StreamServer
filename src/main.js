@@ -217,13 +217,11 @@ async function StartStream(StreamKey, StreamAddr, Source){
 		'-rtsp_transport', 'tcp',
 		'-r', '25',
 		'-i', Source,
-		'-vf', "minterpolate='fps=60'",
 		'-c:v', 'hevc_nvenc', 
-		'-preset', 'ultrafast',
-		'-b:v', '6200k',
-		'-pix_fmt', 'yuv420p',
+		'-preset', 'fast',
+		'-filter_complex', '"[0:v]hwupload_cuda,scale_cuda=1920:1080:format=yuv420p,fps=30"',
+		'-g', '60',
 		'-c:a', 'aac',
-		'-r', '60',
 		'-f', 'flv',
 		destination
     ]
