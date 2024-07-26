@@ -215,6 +215,7 @@ async function StartStream(StreamKey, StreamAddr, Source){
 		'-rtsp_transport', 'tcp',
 		'-r', '25',
 		'-i', Source,
+		'-vf', "minterpolate='fps=60'",
 		'-c:v', 'hevc_nvenc', 
 		'-b:v', '6200k',
 		'-pix_fmt', 'yuv420p',
