@@ -102,6 +102,7 @@ app.get('/golive', (req,res)=>{
 
 async function TransitionStream(youtube, broadcastId, retry=0){
 	await sleep(10000)
+	console.log("Attempting Stream Transition...")
 	return youtube.liveBroadcasts.transition({
 		part: 'id,status',
 		id: broadcastId,
@@ -112,6 +113,7 @@ async function TransitionStream(youtube, broadcastId, retry=0){
 		return res
 	})
 	.catch(async (err)=>{
+		console.log(`Stream Transition Failed. r=${retry}`)
 		if(retry<10){
 			return TransitionStream(youtube, broadcastId, retry+1)
 		} else {
