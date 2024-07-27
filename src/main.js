@@ -233,6 +233,7 @@ async function StartStream(StreamKey, StreamAddr, Source){
 		'-c:a', 'aac',
 		'-f', 'flv',
 		'-rtmp_buffer', '1000k',
+		'-fps_mode', 'cfr',
 		destination
     ]
 	console.log(`Spawning FFMPEG ${args.join(" ")}`)
