@@ -100,7 +100,7 @@ app.get('/golive', (req,res)=>{
 })
 
 async function TransitionStream(youtube, broadcastId, retry=0){
-	await sleep(20000+(2000*retry))
+	await sleep(60000+(2000*retry))
 	console.log("Attempting Stream Transition...")
 	return youtube.liveBroadcasts.transition({
 		part: 'id,status',
@@ -186,14 +186,15 @@ app.get('/golive/:camID', async (req,res)=>{
 		
 		
 		
-		res.redirect(`http://youtube.com/watch?v=${broadcastResponse.data.id}`)
-		
 		const open = await import("open");
 		chrome = await open.default(`https://studio.youtube.com/video/${broadcastResponse.data.id}/livestreaming`)
 		
 		console.log(`Stream Monitor ${broadcastResponse.data.id} is running`);
 
+		console.log("Starting Stream Transition in 1 minute.")
 		await TransitionStream(youtube, broadcastId)
+		
+		res.redirect(`http://youtube.com/watch?v=${broadcastResponse.data.id}`)
 		
 		chrome.kill('SIGINT');
 		console.log(`Youtube Fooled - Killing Stream Monitor ${broadcastResponse.data.id}`)
