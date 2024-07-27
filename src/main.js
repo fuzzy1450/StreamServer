@@ -24,8 +24,8 @@ const oauth2Client = new google.auth.OAuth2(
 );
 
 oauth2Client.on('tokens', (tokens) => {
-	console.log(tokens)
 	if (tokens.refresh_token) {
+		console.debug(`Tokens have refreshed`)
 		oauth2Client.setCredentials({
 			refresh_token: `STORED_REFRESH_TOKEN`
 		});
@@ -85,7 +85,6 @@ app.get('/oauth', async (req,res)=>{
 	const { tokens } = await oauth2Client.getToken(ytcode);
 	oauth2Client.setCredentials(tokens);
 	
-	console.log(ytcode)
 	res.redirect('/golive')
 })
 app.get('/golive', (req,res)=>{
@@ -181,17 +180,23 @@ app.get('/golive/:camID', async (req,res)=>{
 		let Addr = streamResponse.data.cdn.ingestionInfo.ingestionAddress
 		
 		
+		
 		StartStream(StreamKey, Addr, req.params["camID"])
 		console.log('FFMPEG is running');
 		
 		
 		
-		
-		
-		
 		res.redirect(`http://youtube.com/watch?v=${broadcastResponse.data.id}`)
+		
+		const open = await import("open");
+		chrome = await open.default(`https://studio.youtube.com/video/${broadcastResponse.data.id}/livestreaming`)
+		
+		console.log(`Stream Monitor ${broadcastResponse.data.id} is running`);
 
 		await TransitionStream(youtube, broadcastId)
+		
+		chrome.kill('SIGINT');
+		console.log(`Youtube Fooled - Killing Stream Monitor ${broadcastResponse.data.id}`)
 	} 
 	catch (error) {
 		console.error('Error creating livestream:', error);
