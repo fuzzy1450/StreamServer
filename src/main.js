@@ -158,7 +158,7 @@ app.get('/golive/:camID', async (req,res)=>{
 			  title: 'New Live Stream'
 			},
 			cdn: {
-			  resolution: '1080p',
+			  resolution: '720p',
 			  ingestionType: 'rtmp',
 			  frameRate:'30fps'
 			}
@@ -221,11 +221,11 @@ async function StartStream(StreamKey, StreamAddr, Source){
 		'-i', Source,
 		'-c:v', 'hevc_nvenc', 
 		'-preset', 'fast',
-		'-filter_complex', "[0:v]hwupload_cuda,scale_cuda=1920:1080:format=yuv420p,fps=45",
-		'-g', '60',
+		'-filter_complex', "[0:v]hwupload_cuda,scale_cuda=1280:720:format=yuv420p,fps=60",
+		'-g', '120',
 		'-c:a', 'aac',
 		'-f', 'flv',
-		'-rtmp_buffer', '5000',
+		'-rtmp_buffer', '1000k',
 		destination
     ]
 	console.log(`Spawning FFMPEG ${args.join(" ")}`)
