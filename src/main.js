@@ -227,6 +227,7 @@ async function StartStream(StreamKey, StreamAddr, Source){
 		'-i', Source,
 		'-c:v', 'hevc_nvenc', 
 		'-preset', 'fast',
+		'-rc', 'vbr',
 		'-filter_complex', "[0:v]hwupload_cuda,scale_cuda=1280:720:format=yuv420p,fps=60",
 		'-g', '120',
 		'-c:a', 'aac',
