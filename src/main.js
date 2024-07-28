@@ -89,11 +89,7 @@ app.get('/oauth', async (req,res)=>{
 })
 app.get('/golive', (req,res)=>{
 	if(ytcode){
-		res.send(`<h1>Which one should go live?</h1>
-			<a href='/golive/1'>Camera 1</a>
-			<br>
-			<a href='/golive/2'>Camera 2</a>
-	`)
+		res.sendFile('./views/ControlPanel.html', { root: __dirname+"/../" })
 	} else {
 		res.redirect('/init')
 	}
@@ -231,13 +227,29 @@ app.post("/loadStream/:bcID/:uri", async (req, res)=>{
 
 async function StartStream(StreamKey, StreamAddr, Source){
 	
+	let cam_ip = null
+	let channel = null
+	
 	if(Source==1){
-		Source = "rtsp://admin:spot9666@192.168.50.225:554/h264Preview_07_main"
+		cam_ip = "216"
+		channel = "05" // PH Pool 7
 	} else if (Source==2){
-		Source = "rtsp://admin:spot9666@192.168.50.216:554/h264Preview_07_main"
-	} else {
+		cam_ip = "216"
+		channel = "04" // PH Pool 4
+	} else if (Source==3){
+		cam_ip = "216"
+		channel = "03" // PH Pool 5
+	} else if (Source==4){
+		cam_ip = "216"
+		channel = "02" // PH Pool 3
+	} else if (Source==5){
+		cam_ip = "216"
+		channel = "01" // PH Pool 6
+	}   else {
 		throw Error("Camera not specified!")
 	}
+	
+	SourceAddr = `rtsp://admin:spot9666@192.168.50.${cam_ip}:554/h264Preview_${channel}_main`
 	
 	destination = StreamAddr+'/'+StreamKey
 	console.log(`Starting Stream to [${destination}]`)
@@ -247,7 +259,7 @@ async function StartStream(StreamKey, StreamAddr, Source){
 		'-hwaccel', 'cuda',
 		'-rtsp_transport', 'tcp',
 		'-r', '25',
-		'-i', Source,
+		'-i', SourceAddr,
 		'-c:v', 'hevc_nvenc', 
 		'-preset', 'fast',
 		'-rc', 'vbr',

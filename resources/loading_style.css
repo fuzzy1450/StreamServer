@@ -3,30 +3,21 @@ body {
 	display:flex;
 	align-content:center;
 	flex-direction: column;
-	flex-wrap:wrap;
 }
 
 .table {
-	margin-top:25px;
 	background-image: url("/resources/table.png");
 	background-size: contain;
 	background-repeat: no-repeat;
-	width:464px;
-	height:336px;
-}
-
-.table h4{
-	margin-top: 65px;
+	width:250px;
+	height:250px;
 }
 
 
 .container {
-	width:90%;
-	margin-top:100px;
 	display: flex;
-	flex-wrap:wrap;
 	background-color: #ff914d;
-	flex-direction: row;
+	flex-direction: column;
 	align-content: center;
 	justify-content: space-around;
 	text-align: center;
