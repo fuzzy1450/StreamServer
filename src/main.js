@@ -128,9 +128,12 @@ app.get('/golive/:camID', async (req,res)=>{
 	console.log("Initiating the Stream Process...")
 	
 	try {
-
+		console.log("Testing Auth Token...")
 		// Create live broadcast
 		const youtube = google.youtube({ version: 'v3', auth: oauth2Client });
+		console.log("Auth Token OK")
+		
+		console.log("Creating Broadcast...")
 		const broadcastResponse = await youtube.liveBroadcasts.insert({
 		  part: 'snippet,status',
 		  requestBody: {
@@ -145,7 +148,9 @@ app.get('/golive/:camID', async (req,res)=>{
 		});
 
 		const broadcastId = broadcastResponse.data.id;
+		console.log("Successfully Created Broadcast")
 
+		console.log("Creating Livestream...")
 		// Create live stream
 		const streamResponse = await youtube.liveStreams.insert({
 		  part: 'snippet,cdn',
@@ -162,14 +167,17 @@ app.get('/golive/:camID', async (req,res)=>{
 		});
 
 		const streamId = streamResponse.data.id;
+		console.log("Successfully Creation Livestream")
 
+
+		console.log("Binding Broadcast and Stream...")
 		// Bind broadcast and stream
 		await youtube.liveBroadcasts.bind({
 		  part: 'id,contentDetails',
 		  id: broadcastId,
 		  streamId: streamId
 		});
-
+		console.log("Successfully Bound")
 		
 		
 		
@@ -177,7 +185,7 @@ app.get('/golive/:camID', async (req,res)=>{
 		let Addr = streamResponse.data.cdn.ingestionInfo.ingestionAddress
 		
 		
-		
+		console.log("Starting FFMPEG...")
 		StartStream(StreamKey, Addr, req.params["camID"])
 		console.log('FFMPEG is running');
 		
