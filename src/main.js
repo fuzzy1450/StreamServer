@@ -260,7 +260,6 @@ async function StartStream(StreamKey, StreamAddr, Source){
 	SourceAddr = `rtsp://admin:spot9666@192.168.50.${cam_ip}:554/h264Preview_${channel}_main`
 	
 	destination = StreamAddr+'/'+StreamKey
-	console.log(`Starting Stream to [${destination}]`)
 	
 	args = [
 		'-loglevel', 'error',
@@ -279,7 +278,7 @@ async function StartStream(StreamKey, StreamAddr, Source){
 		'-fps_mode', 'cfr',
 		destination
     ]
-	console.log(`Spawning FFMPEG ${args.join(" ")}`)
+	console.debug(`Spawning FFMPEG ${args.join(" ")}`)
 	proc = spawn('ffmpeg.exe', args);
 	proc.stdout.on('data', (data) => {
 		console.log(`FFMPEG o: ${data}`);
