@@ -196,7 +196,7 @@ app.get('/golive/:camID', async (req,res)=>{
 		
 		console.log(`Stream Monitor ${broadcastResponse.data.id} is running`);
 		
-		res.redirect(`./loadStream?bcID=${broadcastId}&uri=${broadcastResponse.data.id}`)
+		res.redirect(`/loadStream?bcID=${broadcastId}&uri=${broadcastResponse.data.id}`)
 
 		
 	} 
@@ -234,7 +234,6 @@ app.post("/loadStream/:bcID/:uri", async (req, res)=>{
 })
 
 async function StartStream(StreamKey, StreamAddr, Source){
-	console.log(Source)
 	Source = parseInt(Source)
 	let cam_ip = null
 	let channel = null
