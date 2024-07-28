@@ -1,0 +1,19 @@
+body {
+	background-color: black;
+	display:flex;
+	align-content:center;
+	flex-direction: column;
+}
+
+img {
+	
+}
+
+.container {
+	display: flex;
+	background-color: #ff914d;
+	flex-direction: column;
+	align-content: center;
+	justify-content: space-around;
+	text-align: center;
+}

@@ -100,6 +100,7 @@ app.get('/golive', (req,res)=>{
 })
 
 async function TransitionStream(youtube, broadcastId, retry=0){
+	if(!youtube){youtube = google.youtube({ version: 'v3', auth: oauth2Client })}
 	await sleep(60000+(2000*retry))
 	console.log("Attempting Stream Transition...")
 	return youtube.liveBroadcasts.transition({
@@ -190,14 +191,10 @@ app.get('/golive/:camID', async (req,res)=>{
 		chrome = await open.default(`https://studio.youtube.com/video/${broadcastResponse.data.id}/livestreaming`)
 		
 		console.log(`Stream Monitor ${broadcastResponse.data.id} is running`);
+		
+		res.redirect(`./loading?bcID=${broadcastId}&uri=${broadcastResponse.data.id}`)
 
-		console.log("Starting Stream Transition in 1 minute.")
-		await TransitionStream(youtube, broadcastId)
 		
-		res.redirect(`http://youtube.com/watch?v=${broadcastResponse.data.id}`)
-		
-		chrome.kill('SIGINT');
-		console.log(`Youtube Fooled - Killing Stream Monitor ${broadcastResponse.data.id}`)
 	} 
 	catch (error) {
 		console.error('Error creating livestream:', error);
@@ -205,6 +202,32 @@ app.get('/golive/:camID', async (req,res)=>{
 	}
 })
 
+app.get("/loadStream", (req, res)=>{
+	if(!req.query.bcID){
+		res.redirect('/init')
+		return
+	}
+	else if(!req.query.uri){
+		res.redirect('/init')
+		return
+	}
+	
+	res.sendFile('./views/loading.html', { root: __dirname+"/../" })
+
+})
+
+app.post("/loadStream/:bcID/:uri", async (req, res)=>{
+	
+	
+	const broadcastID = req.params["bcID"]
+	const redirectURI = req.params["uri"]
+	
+	
+	console.log("Starting Stream Transition in 1 minute.")
+	wait TransitionStream(null, broadcastID)
+		
+	res.status(200).end()
+})
 
 async function StartStream(StreamKey, StreamAddr, Source){
 	
@@ -256,6 +279,13 @@ async function StartStream(StreamKey, StreamAddr, Source){
 	
 	return proc
 }
+
+
+app.get('/resources/:resource', (req, res) => {
+	let ResourceName = req.params.resource
+	console.debug("["+req.ip+"] Requested Resource " + ResourceName)
+	res.sendFile(ResourceName, { root: __dirname+"/../resources" })
+})
 
 const httpServer = http.createServer(app);
 const httpsServer = https.createServer(credentials, app);
