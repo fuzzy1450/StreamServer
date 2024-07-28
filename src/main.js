@@ -224,7 +224,7 @@ app.post("/loadStream/:bcID/:uri", async (req, res)=>{
 	
 	
 	console.log("Starting Stream Transition in 1 minute.")
-	wait TransitionStream(null, broadcastID)
+	await TransitionStream(null, broadcastID)
 		
 	res.status(200).end()
 })
