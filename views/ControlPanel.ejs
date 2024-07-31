@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<link rel="stylesheet" href="/resources/style.css">
+	</head>
+	<body>
+	
+		<div id="floor">
+	
+			<div id="far_row" class="container">
+				<div class="table_h">
+					<br>
+					<h4>#01</h4>
+					<button class="offline">No Cam</button>
+				</div>
+				<div class="table_v">
+					<br>
+					<h4>#06</h4>
+					<button class="offline">No Cam</button>
+				</div>
+				<div class="table_v">
+					<br>
+					<h4>#02</h4>
+					<button class="offline">No Cam</button>
+				</div>
+				<div class="table_v">
+					<br>
+					<h4>#03</h4>
+					<button class="offline">No Cam</button>
+				</div>
+				<div class="table_v">
+					<br>
+					<h4>#NoNum</h4>
+					<button class="offline">No Cam</button>
+				</div>
+				<div class="table_h">
+					<br>
+					<h4>#06</h4>
+					<button class="offline">No Cam</button>
+				</div>
+			</div>
+
+			
+			<div id="middle_row" class="container">
+				<div class="table_v">
+					<br>
+					<h4>#NoNum</h4>
+					<button class="offline">No Cam</button>
+				</div>
+				<div class="table_v">
+					<br>
+					<h4>#05</h4>
+					<button class="offline">No Cam</button>
+				</div>
+			</div>
+			
+
+			<div id="close_row" class="container">
+			<div class="table_h">
+				<br>
+				<h4>#01</h4>
+				<a href='/golive/1'><button>Go Live</button></a>
+			</div>
+			<div class="table_v">
+				<br>
+				<h4>#02</h4>
+				<a href='/golive/2'><button>Go Live</button></a>
+			</div>
+			<div class="table_v">
+				<br>
+				<h4>#03</h4>
+				<a href='/golive/3'><button>Go Live</button></a>
+			</div>
+			<div class="table_v">
+				<br>
+				<h4>#04</h4>
+				<a href='/golive/4'><button>Go Live</button></a>
+			</div>
+			<div class="table_v">
+				<br>
+				<h4>#05</h4>
+				<a href='/golive/5'><button>Go Live</button></a>
+			</div>
+			<div class="table_h">
+				<br>
+				<h4>#NoNum</h4>
+				<a href='/golive/6'><button>Go Live</button></a>
+			</div>	
+		</div>
+				
+		</div>
+		
+		
+		<div id="Live">
+			<h2>Currently Live:</h2>
+			<div class="container">
+				<% Streams.forEach(function(stream) { %>
+					<a href=http://www.youtube.com/watch?v=<%=stream%>>
+						<div class="StreamInfo">
+							<strong>This One!</strong>
+						</div>
+					</a>
+				<% }); %>
+			</div>
+		</div>
+		
+		<footer>
+			<div id="info">
+				<p>Streams will be automatically stopped after closing.</p>
+			</div>
+		</footer>
+		
+	</body>
+</html>
+

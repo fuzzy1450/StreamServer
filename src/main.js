@@ -1,7 +1,7 @@
 const {google} = require('googleapis');
 const crypto = require('crypto');
 const { spawn } = require('node:child_process');
-const StreamManager = require('src/StreamManager');
+const {StreamManager} = require('src/StreamManager');
 
 const express = require('express')
 const session = require('express-session');
@@ -90,7 +90,7 @@ app.get('/oauth', async (req,res)=>{
 })
 app.get('/golive', (req,res)=>{
 	if(ytcode){
-		res.sendFile('./views/ControlPanel.html', { root: __dirname+"/../" })
+		res.render('ControlPanel.ejs', { Streams: StreamManager.getIdList(), root: __dirname+"/../" })
 	} else {
 		res.redirect('/init')
 	}
@@ -217,7 +217,7 @@ app.get("/loadStream", (req, res)=>{
 		return
 	}
 	
-	res.sendFile('./views/loading.html', { root: __dirname+"/../" })
+	res.render('./views/loading.html', { root: __dirname+"/../" })
 
 })
 
@@ -240,7 +240,7 @@ async function StartStream(StreamKey, StreamAddr, Source){
 	
 	if(Source==1){
 		cam_ip = "216"
-		channel = "05" // PH Pool 7
+		channel = "01" // PH Pool 7
 	} else if (Source==2){
 		cam_ip = "216"
 		channel = "04" // PH Pool 4
@@ -252,7 +252,7 @@ async function StartStream(StreamKey, StreamAddr, Source){
 		channel = "02" // PH Pool 3
 	} else if (Source==5){
 		cam_ip = "216"
-		channel = "01" // PH Pool 6
+		channel = "05" // PH Pool 6
 	} else if (Source==6){  
 		cam_ip = "216"
 		channel = "08"

@@ -6,23 +6,42 @@ body {
 	flex-wrap:wrap;
 }
 
-.table {
-	margin-top:25px;
-	background-image: url("/resources/table.png");
+.table_h {
+	margin-top:50px;
+	margin-bottom: 15px;
+	background-image: url("/resources/table_h.png");
 	background-size: contain;
 	background-repeat: no-repeat;
-	width:464px;
-	height:336px;
+	width:174px;
+	height:126px;
+}
+
+.table_v {
+	margin-top:25px;
+	margin-bottom: 15px;
+	background-image: url("/resources/table_v.png");
+	background-size: contain;
+	background-repeat: no-repeat;
+	height:174px;
+	width:126px;
 }
 
 .table h4{
-	margin-top: 65px;
+	margin-top: 35px;
 }
 
+#floor {
+	background-color: #ff914d;
+	margin-top:75px;
+	display:flex;
+	flex-direction: column;
+	margin-bottom: 25px;
+	height:750px;
+}
 
 .container {
-	width:90%;
-	margin-top:100px;
+	width:100%;
+	margin-top:25px;
 	display: flex;
 	flex-wrap:wrap;
 	background-color: #ff914d;
@@ -30,4 +49,43 @@ body {
 	align-content: center;
 	justify-content: space-around;
 	text-align: center;
+}
+
+#middle_row {
+	justify-content: space-between;
+}
+
+#middle_row .table_v{
+	margin-left:75px;
+	margin-right:75px;
+}
+
+
+#Live {
+	width:90%;
+	margin-top:100px;
+	display: flex;
+	flex-wrap:wrap;
+	background-color: #ff914d;
+	flex-direction: column;
+	align-content: center;
+	justify-content: space-around;
+	text-align: center;
+	min-height:150px;
+}
+
+#Live .container {
+	margin-top: 5px;
+}
+
+.StreamInfo { 
+	width: 100px;
+	height: 100px;
+	background-color: #E2DFD0;
+	border:2px solid #524C42;
+	margin-bottom:25px;
+}
+
+.offline {
+	background-color:red
 }

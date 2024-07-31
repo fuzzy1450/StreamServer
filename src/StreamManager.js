@@ -17,7 +17,7 @@ class StreamManager{
 	}
 	
 	getIdList(){
-		return this.Streams.keys()
+		return Object.keys(this.Streams)
 	}
 	
 	killStream(id){
