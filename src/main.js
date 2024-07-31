@@ -253,7 +253,10 @@ async function StartStream(StreamKey, StreamAddr, Source){
 	} else if (Source==5){
 		cam_ip = "216"
 		channel = "01" // PH Pool 6
-	}   else {
+	} else if (Source==6){  
+		cam_ip = "216"
+		channel = "08"
+	} else {
 		throw Error("Camera not specified!")
 	}
 	
