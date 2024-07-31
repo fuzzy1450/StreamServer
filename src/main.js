@@ -1,6 +1,7 @@
 const {google} = require('googleapis');
 const crypto = require('crypto');
 const { spawn } = require('node:child_process');
+const StreamManager = require('src/StreamManager');
 
 const express = require('express')
 const session = require('express-session');
@@ -186,17 +187,17 @@ app.get('/golive/:camID', async (req,res)=>{
 		
 		
 		console.log("Starting FFMPEG...")
-		StartStream(StreamKey, Addr, req.params["camID"])
+		StreamManager.addStream(broadcastId, StartStream(StreamKey, Addr, req.params["camID"]))
 		console.log('FFMPEG is running');
 		
 		
 		
 		const open = await import("open");
-		chrome = await open.default(`https://studio.youtube.com/video/${broadcastResponse.data.id}/livestreaming`)
+		chrome = await open.default(`https://studio.youtube.com/video/${broadcastId}/livestreaming`)
 		
-		console.log(`Stream Monitor ${broadcastResponse.data.id} is running`);
+		console.log(`Stream Monitor ${broadcastId} is running`);
 		
-		res.redirect(`/loadStream?bcID=${broadcastId}&uri=${broadcastResponse.data.id}`)
+		res.redirect(`/loadStream?bcID=${broadcastId}`)
 
 		
 	} 
@@ -220,11 +221,10 @@ app.get("/loadStream", (req, res)=>{
 
 })
 
-app.post("/loadStream/:bcID/:uri", async (req, res)=>{
+app.post("/loadStream/:bcID", async (req, res)=>{
 	
 	
 	const broadcastID = req.params["bcID"]
-	const redirectURI = req.params["uri"]
 	
 	
 	console.log("Starting Stream Transition in 1 minute.")

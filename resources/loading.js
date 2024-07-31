@@ -41,17 +41,16 @@ function waitForLoad(){
 	const urlParams = new URLSearchParams(queryString)
 	
 	let broadcastID = urlParams.get('bcID')
-	let redirectURI = urlParams.get('uri')
 	
 	console.log("Awaiting Stream Load")
 	
-	return fetch(`/loadStream/${broadcastID}/${redirectURI}`, {method: 'POST'})
+	return fetch(`/loadStream/${broadcastID}`, {method: 'POST'})
 	.then(function(response) {
 		if (response.ok) {
 			ChangeText()
 			return delay(10000)
 			.then( function(){ 
-				window.location.href = `http://youtube.com/watch?v=${redirectURI}` 
+				window.location.href = `http://youtube.com/watch?v=${broadcastID}` 
 			})
             
         } else {
