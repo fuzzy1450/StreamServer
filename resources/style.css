@@ -89,3 +89,8 @@ body {
 .offline {
 	background-color:red
 }
+
+#info {
+	color: white;
+	text-align:center;
+}
