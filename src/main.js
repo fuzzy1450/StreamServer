@@ -213,7 +213,7 @@ app.get("/loadStream", (req, res)=>{
 		return
 	}
 	
-	res.render('./views/loading.html', { root: __dirname+"/../" })
+	res.sendFile('./views/loading.html', { root: __dirname+"/../" })
 
 })
 
