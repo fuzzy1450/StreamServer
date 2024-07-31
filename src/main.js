@@ -212,10 +212,6 @@ app.get("/loadStream", (req, res)=>{
 		res.redirect('/init')
 		return
 	}
-	else if(!req.query.uri){
-		res.redirect('/init')
-		return
-	}
 	
 	res.render('./views/loading.html', { root: __dirname+"/../" })
 
