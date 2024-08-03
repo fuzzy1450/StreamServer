@@ -134,7 +134,6 @@ app.get('/streamControl/:camName', async (req,res)=>{
 			id = StreamManager.getStream(camName).id
 		}
 		
-		console.log(`isLive: ${isLive}  |  id: ${id}  |  camName: ${camName}`)
 		res.render('StreamControl.ejs', { camName: camName, isLive: isLive, id: id, root: __dirname+"/../" })
 	} else {
 		res.redirect('/init')
