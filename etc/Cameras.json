@@ -1,0 +1,38 @@
+[
+	{
+		"name": "PH_Pool_6",
+		"cam_ip": "216",
+		"channel": "01",
+		"streaming": false
+	},
+	{
+		"name": "PH_Pool_5",
+		"cam_ip": "216",
+		"channel": "03",
+		"streaming": false
+	},
+	{
+		"name": "PH_Pool_4",
+		"cam_ip": "216",
+		"channel": "04",
+		"streaming": false
+	},
+	{
+		"name": "PH_Pool_8",
+		"cam_ip": "216",
+		"channel": "08",
+		"streaming": false
+	},
+	{
+		"name": "PH_Pool_3",
+		"cam_ip": "216",
+		"channel": "02",
+		"streaming": false
+	},
+	{
+		"name": "PH_Pool_7",
+		"cam_ip": "216",
+		"channel": "05",
+		"streaming": false
+	}
+]

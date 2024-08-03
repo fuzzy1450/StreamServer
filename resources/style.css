@@ -9,6 +9,8 @@ body {
 .table_h {
 	margin-top:50px;
 	margin-bottom: 15px;
+	margin-left:25px;
+	margin-right:25px;
 	background-image: url("/resources/table_h.png");
 	background-size: contain;
 	background-repeat: no-repeat;
@@ -19,12 +21,37 @@ body {
 .table_v {
 	margin-top:25px;
 	margin-bottom: 15px;
+	margin-left:25px;
+	margin-right:25px;
 	background-image: url("/resources/table_v.png");
 	background-size: contain;
 	background-repeat: no-repeat;
 	height:174px;
 	width:126px;
 }
+
+.offline {
+	filter: grayscale(100%);
+}
+
+.live_indicator {
+	width:50px;
+	height:50px;
+	display: none;
+	text-align: center;
+	justify-content: center;
+	background-image: url("/resources/blicky.webp");
+	background-size: contain;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+
+.Live .live_indicator {
+	display: flex;
+}
+
+.Live .live_indicator 
 
 .table h4{
 	margin-top: 35px;

@@ -4,27 +4,66 @@ const schedule = require('node-schedule')
 class StreamManager{
 	constructor(){
 		this.Streams = {}
+		this.Cameras = {}
 		
 		const nightlyCleanup = schedule.scheduleJob('* 1 * * *', this.KillAllStreams);
 	}
 	
-	addStream(id, proc){
-		this.Streams[id] = proc
+	addStream(camName, id, proc){
+		this.Streams[camName] = {camName: camName, id: id, proc: proc}
+		this.setLive(camName)
 	}
 	
-	getStream(id){
-		return this.Streams[id]
+	getStream(camName){
+		return this.Streams[camName]
 	}
 	
-	getIdList(){
-		return Object.keys(this.Streams)
+	isLive(camName){
+		console.log(camName)
+		console.log(this.Cameras)
+		return this.Cameras[camName].streaming
 	}
 	
-	killStream(id){
-		console.log('Killing Stream [${i}]');
-		this.Streams[id].stdin.pause();
-		this.Streams[id].kill();
-		delete this.Streams[id]
+	setLive(camName){
+		this.Cameras[camName].streaming=true
+	}
+	
+	setUnLive(camName){
+		this.Cameras[camName].streaming=false
+	}
+	
+	addCamera(CamObj){
+		console.log(CamObj)
+		this.Cameras[CamObj.name] = CamObj
+	}
+	
+	getCamera(camName){
+		return this.Cameras[camName]
+	}
+	
+	
+	getLiveStreams(){ // gets a list of all active streams. returns [ {name, id} ]
+		let streams = []
+		for (i in this.Streams){
+			streams.push({name:this.Streams[i].camName, id:this.Streams[i].id })
+		}
+		return streams
+	}
+	
+	getIdList(){ // gets a list of all active stream IDs (youtube URIs)
+		let IDs = []
+		for (i in this.Streams){
+			IDs.push(this.Streams[i].id)
+		}
+		return IDs
+	}
+	
+	killStream(camName){
+		console.log('Killing Stream [${camName}]');
+		this.Streams[camName].stdin.pause();
+		this.Streams[camName].kill();
+		this.setUnLive(camName)
+		delete this.Streams[camName]
 	}
 	
 	KillAllStreams(){
@@ -37,4 +76,13 @@ class StreamManager{
 	
 }
 
-exports.StreamManager = new StreamManager()
+
+const SM = new StreamManager()
+
+const Cameras = require("etc/Cameras.json"); // load cameras from the JSON
+for (i in Cameras) {
+	SM.addCamera(Cameras[i])
+}
+
+
+exports.StreamManager = SM

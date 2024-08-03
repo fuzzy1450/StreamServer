@@ -1,3 +1,5 @@
+require('console-stamp')(console, 'HH:MM:ss.l');
+
 const {google} = require('googleapis');
 const crypto = require('crypto');
 const { spawn } = require('node:child_process');
@@ -88,9 +90,10 @@ app.get('/oauth', async (req,res)=>{
 	
 	res.redirect('/golive')
 })
+
 app.get('/golive', (req,res)=>{
 	if(ytcode){
-		res.render('ControlPanel.ejs', { Streams: StreamManager.getIdList(), root: __dirname+"/../" })
+		res.render('ControlPanel.ejs', { Streams: StreamManager.getLiveStreams(), root: __dirname+"/../" })
 	} else {
 		res.redirect('/init')
 	}
@@ -120,11 +123,31 @@ async function TransitionStream(youtube, broadcastId, retry=0){
 	})
 }
 
-app.get('/golive/:camID', async (req,res)=>{
+app.get('/streamControl/:camName', async (req,res)=>{
+	let camName = req.params["camName"]
+	if(ytcode && camName){
+		// check if the stream is live
+		// if it is, send the youtube id.
+		let isLive = StreamManager.isLive(camName)
+		let id = null
+		if(isLive){
+			id = StreamManager.getStream(camName).id
+		}
+		
+		console.log(`isLive: ${isLive}  |  id: ${id}  |  camName: ${camName}`)
+		res.render('StreamControl.ejs', { camName: camName, isLive: isLive, id: id, root: __dirname+"/../" })
+	} else {
+		res.redirect('/init')
+	}
+})
+
+app.get('/golive/:camName', async (req,res)=>{
 	if(!ytcode){
 		res.redirect('/init')
 		return
 	}
+	
+	let camName = req.params["camName"]
 	
 	console.log("Initiating the Stream Process...")
 	
@@ -187,7 +210,7 @@ app.get('/golive/:camID', async (req,res)=>{
 		
 		
 		console.log("Starting FFMPEG...")
-		StreamManager.addStream(broadcastId, StartStream(StreamKey, Addr, req.params["camID"]))
+		StreamManager.addStream(camName, broadcastId, StartStream(StreamKey, Addr, camName))
 		console.log('FFMPEG is running');
 		
 		
@@ -229,32 +252,13 @@ app.post("/loadStream/:bcID", async (req, res)=>{
 	res.status(200).end()
 })
 
-async function StartStream(StreamKey, StreamAddr, Source){
-	Source = parseInt(Source)
-	let cam_ip = null
-	let channel = null
+async function StartStream(StreamKey, StreamAddr, camName){
 	
-	if(Source==1){
-		cam_ip = "216"
-		channel = "01" // PH Pool 6
-	} else if (Source==2){
-		cam_ip = "216"
-		channel = "03" // PH Pool 5
-	} else if (Source==3){
-		cam_ip = "216"
-		channel = "04" // PH Pool 4
-	} else if (Source==4){
-		cam_ip = "216"
-		channel = "08" // PH Pool 8
-	} else if (Source==5){
-		cam_ip = "216"
-		channel = "02" // PH Pool 3
-	} else if (Source==6){  
-		cam_ip = "216"
-		channel = "05" // PH Pool 7
-	} else {
-		throw Error("Camera not specified!")
-	}
+	
+	let Camera = StreamManager.getCamera(camName)
+	let cam_ip = Camera.cam_ip
+	let channel = Camera.channel
+	
 	
 	SourceAddr = `rtsp://admin:spot9666@192.168.50.${cam_ip}:554/h264Preview_${channel}_main`
 	

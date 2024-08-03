@@ -8,32 +8,32 @@
 		<div id="floor">
 	
 			<div id="far_row" class="container">
-				<div class="table_h">
+				<div class="table_h offline">
 					<br>
 					<h4>#01</h4>
 					<button class="offline">No Cam</button>
 				</div>
-				<div class="table_v">
+				<div class="table_v offline">
 					<br>
 					<h4>#06</h4>
 					<button class="offline">No Cam</button>
 				</div>
-				<div class="table_v">
+				<div class="table_v offline">
 					<br>
 					<h4>#02</h4>
 					<button class="offline">No Cam</button>
 				</div>
-				<div class="table_v">
+				<div class="table_v offline">
 					<br>
 					<h4>#03</h4>
 					<button class="offline">No Cam</button>
 				</div>
-				<div class="table_v">
+				<div class="table_v offline">
 					<br>
 					<h4>#NoNum</h4>
 					<button class="offline">No Cam</button>
 				</div>
-				<div class="table_h">
+				<div class="table_h offline">
 					<br>
 					<h4>#06</h4>
 					<button class="offline">No Cam</button>
@@ -42,46 +42,64 @@
 
 			
 			<div id="middle_row" class="container">
-				<div class="table_v">
+				<div class="table_v offline">
 					<br>
 					<h4>#NoNum</h4>
 					<button class="offline">No Cam</button>
 				</div>
-				<div class="table_v">
+				<div class="table_v" id="PH_Pool_7">
 					<br>
 					<h4>#05</h4>
-					<a href='/golive/6'><button>Go Live</button></a>
+					<a href='/streamControl/PH_Pool_7'><button>Control Panel</button></a>
+					<span class="live_indicator">
+						<h3>Live!</h3>
+					</span>
 				</div>
 			</div>
 			
 
 			<div id="close_row" class="container">
-				<div class="table_h">
+				<div class="table_h" id="PH_Pool_6">
 					<br>
 					<h4>#01</h4>
-					<a href='/golive/1'><button>Go Live</button></a>
+					<a href='/streamControl/PH_Pool_6'><button>Control Panel</button></a>
+					<span class="live_indicator">
+						<h3>Live!</h3>
+					</span>
 				</div>
-				<div class="table_v">
+				<div class="table_v" id="PH_Pool_5">
 					<br>
 					<h4>#02</h4>
-					<a href='/golive/2'><button>Go Live</button></a>
+					<a href='/streamControl/PH_Pool_5'><button>Control Panel</button></a>
+					<span class="live_indicator">
+						<h3>Live!</h3>
+					</span>
 				</div>
-				<div class="table_v">
+				<div class="table_v" id="PH_Pool_4">
 					<br>
 					<h4>#03</h4>
-					<a href='/golive/3'><button>Go Live</button></a>
+					<a href='/streamControl/PH_Pool_4'><button>Control Panel</button></a>
+					<span class="live_indicator">
+						<h3>Live!</h3>
+					</span>
 				</div>
-				<div class="table_v">
+				<div class="table_v" id="PH_Pool_8">
 					<br>
 					<h4>#04</h4>
-					<a href='/golive/4'><button>Go Live</button></a>
+					<a href='/streamControl/PH_Pool_8'><button>Control Panel</button></a>
+					<span class="live_indicator">
+						<h3>Live!</h3>
+					</span>
 				</div>
-				<div class="table_v">
+				<div class="table_v" id="PH_Pool_3">
 					<br>
 					<h4>#05</h4>
-					<a href='/golive/5'><button>Go Live</button></a>
+					<a href='/streamControl/PH_Pool_3'><button>Control Panel</button></a>
+					<span class="live_indicator">
+						<h3>Live!</h3>
+					</span>
 				</div>
-				<div class="table_h">
+				<div class="table_h offline">
 					<br>
 					<h4>#NoNum</h4>
 					<button class="offline">No Cam</button>
@@ -91,18 +109,10 @@
 		</div>
 		
 		
-		<div id="Live">
-			<h2>Currently Live:</h2>
-			<div class="container">
-				<% Streams.forEach(function(stream) { %>
-					<a href=http://www.youtube.com/watch?v=<%=stream%>>
-						<div class="StreamInfo">
-							<strong>This One!</strong>
-						</div>
-					</a>
-				<% }); %>
-			</div>
-		</div>
+		
+		<% Streams.forEach(function(stream) {%>
+			<script> document.getElementById("<%=stream.name %>").classList.add("Live") </script>
+		<% }); %>
 		
 		<footer>
 			<div id="info">

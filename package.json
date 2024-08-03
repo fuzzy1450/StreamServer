@@ -17,6 +17,7 @@
   ],
   "dependencies": {
     "auth": "file:./auth",
+    "console-stamp": "^3.1.2",
     "crypto": "^1.0.1",
     "ejs": "^3.1.10",
     "express": "^4.19.2",
@@ -25,7 +26,8 @@
     "node-schedule": "^2.1.1",
     "open": "^10.1.0",
     "src": "file:./src",
-    "views": "file:./views"
+    "views": "file:./views",
+	 "etc": "file:./etc"
   },
   "author": "Evan Kupsch",
   "license": "BSD-3-Clause",

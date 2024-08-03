@@ -1,0 +1,28 @@
+body {
+	background-color: black;
+	display:flex;
+	align-content:center;
+	flex-direction: column;
+	flex-wrap:wrap;
+}
+
+#floor {
+	background-color: #ff914d;
+	margin-top:75px;
+	display:flex;
+	flex-direction: column;
+	margin-bottom: 25px;
+	height:750px;
+}
+
+.container {
+	width:100%;
+	margin-top:25px;
+	display: flex;
+	flex-wrap:wrap;
+	background-color: #ff914d;
+	flex-direction: row;
+	align-content: center;
+	justify-content: space-around;
+	text-align: center;
+}

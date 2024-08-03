@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<link rel="stylesheet" href="/resources/TableControl.css">
+	</head>
+	<body>
+	
+		<div id="floor">
+			<div class="container">
+				<div id="ControlPanel">
+					<%if(isLive){ %>
+						<h3>Stream Link: <a href="http://youtube.com/watch?v=<%=id %>">http://youtube.com/watch?v=<%=id %></a></h3>
+						<button>End Stream</button>
+					<%} else {%>
+						<a href="/golive/<%=camName %>"><button>Start Stream</button></a>
+					<%}%>
+				</div>
+			</div>
+		</div>
+		
+	</body>
+</html>
+
