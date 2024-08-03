@@ -19,8 +19,6 @@ class StreamManager{
 	}
 	
 	isLive(camName){
-		console.log(camName)
-		console.log(this.Cameras)
 		return this.Cameras[camName].streaming
 	}
 	
@@ -33,7 +31,6 @@ class StreamManager{
 	}
 	
 	addCamera(CamObj){
-		console.log(CamObj)
 		this.Cameras[CamObj.name] = CamObj
 	}
 	
