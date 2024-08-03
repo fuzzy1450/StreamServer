@@ -220,7 +220,7 @@ app.get('/golive/:camName', async (req,res)=>{
 		
 		console.log(`Stream Monitor ${broadcastId} is running`);
 		
-		res.redirect(`/loadStream?bcID=${broadcastId}`)
+		res.redirect(`/loadStream?CN=${camName}&bcID=${broadcastId}`)
 
 		
 	} 

@@ -41,6 +41,7 @@ function waitForLoad(){
 	const urlParams = new URLSearchParams(queryString)
 	
 	let broadcastID = urlParams.get('bcID')
+	let camName = urlParams.get('CN')
 	
 	console.log("Awaiting Stream Load")
 	
@@ -50,7 +51,8 @@ function waitForLoad(){
 			ChangeText()
 			return delay(10000)
 			.then( function(){ 
-				window.location.href = `http://youtube.com/watch?v=${broadcastID}` 
+				newPage = new URL(`/streamControl/${camName}`, window.location.href)
+				window.location.href = newPage.href
 			})
             
         } else {
