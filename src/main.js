@@ -114,6 +114,8 @@ async function TransitionStream(youtube, broadcastId, retry=0){
 	})
 	.catch(async (err)=>{
 		console.log(`Stream Transition Failed. r=${retry}`)
+		console.log(err)
+		
 		if(retry<10){
 			return TransitionStream(youtube, broadcastId, retry+1)
 		} else {
@@ -236,7 +238,6 @@ app.get("/loadStream", (req, res)=>{
 	}
 	
 	res.sendFile('./views/loading.html', { root: __dirname+"/../" })
-
 })
 
 app.post("/loadStream/:bcID", async (req, res)=>{
