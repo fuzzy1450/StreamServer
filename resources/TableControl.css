@@ -13,6 +13,7 @@ body {
 	flex-direction: column;
 	margin-bottom: 25px;
 	height:750px;
+	aspect-ratio: 5 / 7;
 }
 
 .container {
@@ -45,3 +46,21 @@ body {
 	margin-top:75px;
 }
 
+#ControlPanel {
+	display:flex;
+	flex-direction:column;
+	min-height:650px;
+	height:75%;
+	justify-content: space-evenly;
+}
+
+#url_field {
+	width:90%;
+	text-align:center;
+}
+
+#kill_stream_button {
+	width:100px;
+	margin-left:auto;
+	margin-right:auto;
+}

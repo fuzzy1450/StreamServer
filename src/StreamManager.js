@@ -12,6 +12,7 @@ class StreamManager{
 	addStream(camName, id, proc){
 		this.Streams[camName] = {camName: camName, id: id, proc: proc}
 		this.setLive(camName)
+		console.log(this.Streams[camName].proc)
 	}
 	
 	getStream(camName){
@@ -56,9 +57,10 @@ class StreamManager{
 	}
 	
 	killStream(camName){
-		console.log('Killing Stream [${camName}]');
-		this.Streams[camName].stdin.pause();
-		this.Streams[camName].kill();
+		
+		console.log(`Killing Stream [${camName}]`);
+		this.Streams[camName].proc.stdin.pause();
+		this.Streams[camName].proc.kill();
 		this.setUnLive(camName)
 		delete this.Streams[camName]
 	}

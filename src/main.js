@@ -212,7 +212,7 @@ app.post('/golive/:camName', async (req,res)=>{
 		
 		
 		console.log("Starting FFMPEG...")
-		StreamManager.addStream(camName, broadcastId, StartStream(StreamKey, Addr, camName))
+		StreamManager.addStream(camName, broadcastId, await StartStream(StreamKey, Addr, camName))
 		console.log('FFMPEG is running');
 		
 		
@@ -242,7 +242,7 @@ app.post('/takedown/:camName', async (req,res)=>{ 	// might want to secure this 
 		res.redirect('/init')
 		return
 	}
-	
+	console.log(`Request to Kill Stream on camera ${camName}`)
 	StreamManager.killStream(camName)
 	
 	res.status(200).end()

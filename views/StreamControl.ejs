@@ -5,13 +5,17 @@
 		<script type='text/javascript' src="/resources/TableControl.js"></script>
 	</head>
 	<body>
-	
 		<div id="floor">
 			<div class="container">
 				<div id="ControlPanel">
 					<%if(isLive){ %>
-						<h3>Stream Link: <a href="http://youtube.com/watch?v=<%=id %>">http://youtube.com/watch?v=<%=id %></a></h3>
-						<button>End Stream</button>
+						<iframe width="424" height="240" src="https://www.youtube.com/embed/<%=id %>" frameborder="0" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+						<span>
+							<h3>Stream Link (click to copy)</h3>
+							<input type="text" value="http://youtube.com/watch?v=<%=id %>" id="url_field" onclick="copyText()"></input>
+						</span>
+						<button onclick="killStream('<%=camName %>')" id="kill_stream_button">End Stream</button>
+					
 					<%} else {%>
 						<button onclick="loadStream('<%=camName %>')">Start Stream</button>
 					<%}%>

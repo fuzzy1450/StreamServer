@@ -45,3 +45,21 @@ function killStream(camName){
 	})
 }
 
+function notify(txt){
+	//TODO: implement
+}
+
+function copyText() {
+  var copyText = document.getElementById("url_field");
+
+
+  copyText.select();
+  copyText.setSelectionRange(0, 99999); // For mobile devices
+
+
+  navigator.clipboard.writeText(copyText.value);
+
+  // Alert the copied text
+  notify("Copied the URL");
+}
+
