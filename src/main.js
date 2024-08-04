@@ -101,7 +101,7 @@ app.get('/golive', (req,res)=>{
 
 async function TransitionStream(youtube, broadcastId, retry=0){
 	if(!youtube){youtube = google.youtube({ version: 'v3', auth: oauth2Client })}
-	await sleep(60000+(2000*retry))
+	await sleep(45000+(2000*retry))
 	console.log("Attempting Stream Transition...")
 	return youtube.liveBroadcasts.transition({
 		part: 'id,status',
@@ -125,6 +125,7 @@ async function TransitionStream(youtube, broadcastId, retry=0){
 	})
 }
 
+
 app.get('/streamControl/:camName', async (req,res)=>{
 	let camName = req.params["camName"]
 	if(ytcode && camName){
@@ -142,7 +143,7 @@ app.get('/streamControl/:camName', async (req,res)=>{
 	}
 })
 
-app.get('/golive/:camName', async (req,res)=>{
+app.post('/golive/:camName', async (req,res)=>{
 	if(!ytcode){
 		res.redirect('/init')
 		return
@@ -221,7 +222,10 @@ app.get('/golive/:camName', async (req,res)=>{
 		
 		console.log(`Stream Monitor ${broadcastId} is running`);
 		
-		res.redirect(`/loadStream?CN=${camName}&bcID=${broadcastId}`)
+		console.log("Attempting Stream Transition in 45 seconds.")
+		await TransitionStream(null, broadcastId)
+		
+		res.status(200).end()
 
 		
 	} 
@@ -231,26 +235,19 @@ app.get('/golive/:camName', async (req,res)=>{
 	}
 })
 
-app.get("/loadStream", (req, res)=>{
-	if(!req.query.bcID){
+app.post('/takedown/:camName', async (req,res)=>{ 	// might want to secure this - perhaps force a re-auth? 
+	let camName = req.params["camName"]				// that would prevent people from stopping their own streams.
+													// maybe dont let users do this - do it automatically after inactivity?
+	if(!ytcode || !camName){	
 		res.redirect('/init')
 		return
 	}
 	
-	res.sendFile('./views/loading.html', { root: __dirname+"/../" })
-})
-
-app.post("/loadStream/:bcID", async (req, res)=>{
+	StreamManager.killStream(camName)
 	
-	
-	const broadcastID = req.params["bcID"]
-	
-	
-	console.log("Starting Stream Transition in 1 minute.")
-	await TransitionStream(null, broadcastID)
-		
 	res.status(200).end()
 })
+
 
 async function StartStream(StreamKey, StreamAddr, camName){
 	

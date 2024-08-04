@@ -26,3 +26,22 @@ body {
 	justify-content: space-around;
 	text-align: center;
 }
+
+#loadingPane {
+	position:absolute;
+	z-index:1;
+	display:none;
+	height:100%;
+	width:100%;
+	background: rgba(105, 105, 105, 0.6)
+}
+
+#loadingPane .container {
+	height: 75%;
+	width: 50%;
+	flex-direction: column;
+	margin-left:auto;
+	margin-right:auto;
+	margin-top:75px;
+}
+

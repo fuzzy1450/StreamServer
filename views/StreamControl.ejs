@@ -2,6 +2,7 @@
 <html>
 	<head>
 		<link rel="stylesheet" href="/resources/TableControl.css">
+		<script type='text/javascript' src="/resources/TableControl.js"></script>
 	</head>
 	<body>
 	
@@ -12,9 +13,17 @@
 						<h3>Stream Link: <a href="http://youtube.com/watch?v=<%=id %>">http://youtube.com/watch?v=<%=id %></a></h3>
 						<button>End Stream</button>
 					<%} else {%>
-						<a href="/golive/<%=camName %>"><button>Start Stream</button></a>
+						<button onclick="loadStream('<%=camName %>')">Start Stream</button>
 					<%}%>
 				</div>
+			</div>
+		</div>
+		
+		<div id="loadingPane">
+			<div class="container">
+				<h1>Your Stream Is Loading</h1>
+				<h3 id='load_tip'>This may take a minute - Please don't go away!</h3>
+				<img src="/resources/loading.gif" />
 			</div>
 		</div>
 		
