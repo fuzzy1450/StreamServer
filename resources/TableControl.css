@@ -59,8 +59,13 @@ body {
 	text-align:center;
 }
 
-#kill_stream_button {
+button {
 	width:100px;
 	margin-left:auto;
 	margin-right:auto;
 }
+
+#snapshotPreview {
+	width:650px;
+}
+

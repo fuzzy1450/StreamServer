@@ -47,6 +47,7 @@ class StreamManager{
 		}
 		return streams
 	}
+
 	
 	getIdList(){ // gets a list of all active stream IDs (youtube URIs)
 		let IDs = []

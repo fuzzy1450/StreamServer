@@ -17,6 +17,7 @@
 						<button onclick="killStream('<%=camName %>')" id="kill_stream_button">End Stream</button>
 					
 					<%} else {%>
+						<img id="snapshotPreview" src="/snapshot/<%=camName %>" />
 						<button onclick="loadStream('<%=camName %>')">Start Stream</button>
 					<%}%>
 				</div>

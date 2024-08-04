@@ -7,6 +7,8 @@ const {StreamManager} = require('src/StreamManager');
 
 const express = require('express')
 const session = require('express-session');
+const axios = require('axios');
+
 const fs = require('fs');
 const http = require('http');
 const https = require('https');
@@ -249,6 +251,7 @@ app.post('/takedown/:camName', async (req,res)=>{ 	// might want to secure this 
 })
 
 
+
 async function StartStream(StreamKey, StreamAddr, camName){
 	
 	
@@ -302,9 +305,30 @@ async function StartStream(StreamKey, StreamAddr, camName){
 
 app.get('/resources/:resource', (req, res) => {
 	let ResourceName = req.params.resource
-	console.debug("["+req.ip+"] Requested Resource " + ResourceName)
+	console.debug(`[${req.ip}] Requested Resource ${ResourceName}`)
 	res.sendFile(ResourceName, { root: __dirname+"/../resources" })
 })
+
+app.get('/snapshot/:camName', async (req,res)=>{
+	let camName = req.params["camName"]
+	console.log(`[${req.ip}] Requested Snapshpot from camera ${camName}`)
+	
+	let Camera = StreamManager.getCamera(camName)
+	let cam_ip = Camera.cam_ip
+	let snap_chan = Camera.snap_chan
+	
+	let imgAddr = `http://192.168.50.${cam_ip}/cgi-bin/api.cgi?cmd=Snap&channel=${snap_chan}&rs=idkwhattheRSisFor&user=admin&password=spot9666`
+	
+	console.log(imgAddr)
+	
+	const response = await axios.get(imgAddr, { responseType: "stream" })
+	
+	res.setHeader('Content-Type', 'image/jpeg')
+	
+	response.data.pipe(res)
+	
+})
+
 
 const httpServer = http.createServer(app);
 const httpsServer = https.createServer(credentials, app);
