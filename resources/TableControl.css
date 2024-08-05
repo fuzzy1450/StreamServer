@@ -30,7 +30,7 @@ body {
 
 #loadingPane {
 	position:absolute;
-	z-index:1;
+	z-index:2;
 	display:none;
 	height:100%;
 	width:100%;
@@ -40,6 +40,7 @@ body {
 #loadingPane .container {
 	height: 75%;
 	width: 50%;
+	min-width: 400px;
 	flex-direction: column;
 	margin-left:auto;
 	margin-right:auto;
@@ -49,9 +50,10 @@ body {
 #ControlPanel {
 	display:flex;
 	flex-direction:column;
-	min-height:650px;
+	min-height:550px;
+	margin-bottom:100px;
 	height:75%;
-	justify-content: space-evenly;
+	justify-content: space-around;
 }
 
 #url_field {
@@ -66,6 +68,27 @@ button {
 }
 
 #snapshotPreview {
-	width:650px;
+	width:424px;
+	height:240px;
+}
+
+#snapshotPreviewSpan {
+	display:flex;
+	flex-direction:column;
+	text-align:right;
+}
+
+#loadingGIF {
+	max-width: 700px;
+	width: 95%;
+	min-width: 375px;
+}
+
+#notificationBox {
+	display:none;
+	width: 45%;
+	height: 65px;
+	background-color: grey;
+	z-index:1;
 }
 

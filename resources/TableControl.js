@@ -46,7 +46,30 @@ function killStream(camName){
 }
 
 function notify(txt){
-	//TODO: implement
+	NotificationText = document.getElementById("notificationText")
+	let NotificationBox = document.getElementById("notificationBox")
+	
+	NotificationText.innerHTML = txt;
+	NotificationBox.style.display="block";
+	
+	return delay(1000)
+	.then(function(){
+		fadeout(200, NotificationBox)
+	})
+	
+}
+
+function fadeout(ms, e){
+	if(e.style.opacity - 0.1 < 0){
+		e.style.display = "none"
+		e.style.opacity = 1;
+	} else {
+		e.style.opacity -= 0.1
+		return delay(ms)
+		.then(function(){
+			fadeout(ms, e)
+		})
+	}
 }
 
 function copyText() {
