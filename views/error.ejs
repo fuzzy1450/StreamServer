@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+
+<% switch(err) {
+	case 403: %>
+		Error: 403 Forbidden
+		<% break;
+	
+	default:%>
+		Error: <%=err%>
+		<% break;
+
+%>
+
+</html>

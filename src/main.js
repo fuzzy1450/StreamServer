@@ -73,7 +73,7 @@ app.use(async (req, res, next) => {
 			next()
 		} else {
 			console.log(`Rejected connection from ${req.ip}`)
-			res.status(403).render('403 Forbidden')
+			res.status(403).render('error.ejs', {err: 403})
 		}
 	}
 })
