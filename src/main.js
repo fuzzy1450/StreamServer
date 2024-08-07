@@ -341,6 +341,10 @@ app.get('/resources/:resource', (req, res) => {
 	res.sendFile(ResourceName, { root: __dirname+"/../resources" })
 })
 
+app.get('/favicon.ico', (req, res) => {
+		res.sendFile("favicon.ico", { root: __dirname+"/../resources" })
+})
+
 app.get('/snapshot/:camName', async (req,res)=>{
 	let camName = req.params["camName"]
 	console.log(`[${req.ip}] Requested Snapshpot from camera ${camName}`)
