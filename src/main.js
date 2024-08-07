@@ -8,7 +8,7 @@ const {StreamManager} = require('src/StreamManager');
 const express = require('express')
 const session = require('express-session');
 const axios = require('axios');
-import {publicIpv4} from 'public-ip';
+const {publicIpv4} = require('public-ip');
 
 const fs = require('fs');
 const http = require('http');
