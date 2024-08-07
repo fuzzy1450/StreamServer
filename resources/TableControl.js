@@ -22,8 +22,8 @@ function loadStream(camName){
 		}
 	})
 	.catch(function(err){
-		console.log(err)
-		// TODO: Handle this mf error
+		console.log("Error Loading The Stream")
+		throw err
 	})
 }
 
@@ -40,8 +40,8 @@ function killStream(camName){
 		}
 	})
 	.catch(function(err){
-		console.log(err)
-		// TODO: Handle *this* mf error
+		console.log("Error Killing The Stream")
+		throw err
 	})
 }
 
