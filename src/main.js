@@ -72,7 +72,8 @@ app.use(async (req, res, next) => {
 			req.session.authed = true
 			next()
 		} else {
-			res.status(403)
+			console.log(`Rejected connection from ${req.ip}`)
+			res.status(403).end()
 			return
 		}
 	}
