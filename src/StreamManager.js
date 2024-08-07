@@ -12,7 +12,6 @@ class StreamManager{
 	addStream(camName, id, proc){
 		this.Streams[camName] = {camName: camName, id: id, proc: proc}
 		this.setLive(camName)
-		console.log(this.Streams[camName].proc)
 	}
 	
 	getStream(camName){

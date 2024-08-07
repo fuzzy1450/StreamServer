@@ -317,9 +317,7 @@ app.get('/snapshot/:camName', async (req,res)=>{
 	let cam_ip = Camera.cam_ip
 	let snap_chan = Camera.snap_chan
 	
-	let imgAddr = `http://192.168.50.${cam_ip}/cgi-bin/api.cgi?cmd=Snap&channel=${snap_chan}&rs=idkwhattheRSisFor&user=admin&password=spot9666`
-	
-	console.log(imgAddr)
+	let imgAddr = `http://192.168.50.${cam_ip}/cgi-bin/api.cgi?cmd=Snap&channel=${snap_chan}&rs=idk_what_the_RS_is_For&user=admin&password=spot9666`
 	
 	const response = await axios.get(imgAddr, { responseType: "stream" })
 	
