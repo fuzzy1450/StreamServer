@@ -6,7 +6,7 @@ class StreamManager{
 		this.Streams = {}
 		this.Cameras = {}
 		
-		const nightlyCleanup = schedule.scheduleJob('* 1 * * *', this.KillAllStreams);
+		const nightlyCleanup = schedule.scheduleJob('0 1 * * *', this.KillAllStreams);
 	}
 	
 	addStream(camName, id, proc){
