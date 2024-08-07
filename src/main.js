@@ -167,6 +167,8 @@ app.get('/streamControl/:camName', async (req,res)=>{
 		res.redirect('/init')
 	}
 })
+const weekday = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
+const month = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
 
 app.post('/golive/:camName', async (req,res)=>{
 	if(!ytcode){
@@ -184,12 +186,14 @@ app.post('/golive/:camName', async (req,res)=>{
 		console.log("Auth Token OK")
 		
 		console.log("Creating Broadcast...")
+		let rn = new Date()
+		let TitleDate = `${weekday[rn.getDay()]}, ${month[rn.getMonth()]} ${rn.getDate()} ${rn.getFullYear()} `
 		const broadcastResponse = await youtube.liveBroadcasts.insert({
 		  part: 'snippet,status',
 		  requestBody: {
 			snippet: {
-			  title: 'New Live Broadcast',
-			  scheduledStartTime: new Date().toISOString()
+			  title: `${camName} - ${TitleDate}`,
+			  scheduledStartTime: rn.toISOString()
 			},
 			status: {
 			  privacyStatus: 'public'
