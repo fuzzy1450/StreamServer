@@ -78,10 +78,29 @@ button {
 	text-align:right;
 }
 
+#loadingZone {
+	position:relative;
+	height:390px;
+	width: 75%;
+}
+
 #loadingGIF {
 	max-width: 700px;
 	width: 95%;
-	min-width: 375px;
+	min-width: 390px;
+	z-index:5;
+	margin-left:auto;
+	margin-right:auto;
+	left:0px;
+	position:absolute;
+}
+
+#loadingSnapshot {
+	max-width: 700px;
+	width: 95%;
+	position:absolute;
+	top:0px;
+	left:0px;
 }
 
 #notificationBox {

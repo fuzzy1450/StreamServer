@@ -30,9 +30,12 @@
 		
 		<div id="loadingPane">
 			<div class="container">
-				<h1>Your Stream Is Loading</h1>
+				<h1>Creating A Link<span id="dots">...</span></h1>
 				<h3 id='load_tip'>This may take a minute - Please don't go away!</h3>
-				<img src="/resources/loading.gif" id="loadingGIF" />
+				<span id="loadingZone">
+					<img src="/snapshot/<%=camName %>" id="loadingSnapshot" onload="vid_preview()" />
+					<img src="/resources/loading.gif" id="loadingGIF" />
+				</span>
 			</div>
 		</div>
 		

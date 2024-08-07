@@ -7,11 +7,47 @@ function delay(t, val) {
     return new Promise(resolve => setTimeout(resolve, t, val));
 }
 
+function dots(e, n, m, ms){
+	e.innerHTML = '.'.repeat(m%4)
+	
+	if(n < m){
+		console.log("ran out of dots")
+		return
+	} else {
+		return delay(ms)
+		.then(function(){
+			dots(e, n, m+1, ms)
+		})
+	}
+}
+
+
+
+function vid_preview(){
+	let e = document.getElementById("loadingSnapshot")
+	let uri = document.getElementById("loadingSnapshot").src.split("?")[0]
+	
+	if (e.checkVisibility()) {
+		return delay(250)
+		.then(function(){
+			e.src=uri +"?d=" + new Date().getTime()
+		})
+	}
+}
+
+function start_load_helper(){
+	showLoadingBox()
+	dots(document.getElementById("dots"), 1048576, 0, 250) // thats 36 hours of dots
+	
+	vid_preview()
+	
+}
+
 function loadStream(camName){
 	
 	console.log("Awaiting Stream Load")
 	
-	showLoadingBox()
+	start_load_helper()
 	
 	return fetch(`/golive/${camName}`, {method: 'POST'})
 	.then(function(response) {
@@ -50,7 +86,9 @@ function notify(txt){
 	let NotificationBox = document.getElementById("notificationBox")
 	
 	NotificationText.innerHTML = txt;
+	NotificationBox.style.opacity = 1
 	NotificationBox.style.display="block";
+	
 	
 	return delay(1000)
 	.then(function(){
