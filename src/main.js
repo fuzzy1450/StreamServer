@@ -49,6 +49,8 @@ function sleep(ms) {
 async function networkAuth(ip){
 	if (ip.includes(":192.168.50.")){ // the subnet for the local network
 		return true
+	} else if (ip == "::1") {	// allow perfectly local connections
+		return true
 	} else {
 		let pubIP = await publicIp.v4()
 		return ip.includes(pubIP)
