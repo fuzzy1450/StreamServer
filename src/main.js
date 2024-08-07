@@ -60,7 +60,7 @@ app.use(session({
 	secret: crypto.randomBytes(32).toString('hex'),
 	resave: false,
 	saveUninitialized: true,
-	cookie: { secure: true }
+	cookie: { secure: true, maxAge: 10000 }
 }))
 
 app.use(async (req, res, next) => {
