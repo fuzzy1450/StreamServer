@@ -45,12 +45,14 @@ function sleep(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
 }
 
-// a function to verify that an ip address is within the whitelist
+// a function to verify that an ip address is within the whitelist (the local network)
 async function networkAuth(ip){
-	let pubIP = await publicIp.v4()
-	console.log(`${ip}  ||  ${pubIP}`)
-	
-	return false
+	if (ip.includes(":192.168.50."){ // the subnet for the local network
+		return true
+	} else {
+		let pubIP = await publicIp.v4()
+		return ip.includes(pubIP)
+	}
 }
 
 const app = express()
