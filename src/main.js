@@ -8,7 +8,7 @@ const {StreamManager} = require('src/StreamManager');
 const express = require('express')
 const session = require('express-session');
 const axios = require('axios');
-const {publicIpv4} = require('public-ip');
+const publicIp = require('public-ip');
 
 const fs = require('fs');
 const http = require('http');
@@ -47,7 +47,7 @@ function sleep(ms) {
 
 // a function to verify that an ip address is within the whitelist
 async function networkAuth(ip){
-	let pubIP = await publicIpv4()
+	let pubIP = await publicIp.v4()
 	console.log(`${ip}  ||  ${pubIP}`)
 	
 	return false
