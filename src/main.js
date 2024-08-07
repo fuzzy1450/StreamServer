@@ -47,7 +47,7 @@ function sleep(ms) {
 
 // a function to verify that an ip address is within the whitelist (the local network)
 async function networkAuth(ip){
-	if (ip.includes(":192.168.50."){ // the subnet for the local network
+	if (ip.includes(":192.168.50.")){ // the subnet for the local network
 		return true
 	} else {
 		let pubIP = await publicIp.v4()
