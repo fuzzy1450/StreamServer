@@ -27,6 +27,7 @@
     "googleapis": "^140.0.1",
     "node-schedule": "^2.1.1",
     "open": "^10.1.0",
+    "public-ip": "^7.0.1",
     "src": "file:./src",
     "views": "file:./views"
   },

@@ -8,6 +8,7 @@ const {StreamManager} = require('src/StreamManager');
 const express = require('express')
 const session = require('express-session');
 const axios = require('axios');
+import {publicIpv4} from 'public-ip';
 
 const fs = require('fs');
 const http = require('http');
@@ -44,7 +45,13 @@ function sleep(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
 }
 
-
+// a function to verify that an ip address is within the whitelist
+async function networkAuth(ip){
+	let pubIP = await publicIpv4()
+	console.log(`${ip}  ||  ${pubIP}`)
+	
+	return false
+}
 
 const app = express()
 app.use(session({
@@ -54,6 +61,20 @@ app.use(session({
 	cookie: { secure: true }
 }))
 
+app.use(async (req, res, next) => {
+	if(req.session.authed) {
+		next()
+	} else {
+		let authed = await networkAuth(req.ip)
+		if( authed ) {
+			req.session.authed = true
+			next()
+		} else {
+			res.status(403)
+			return
+		}
+	}
+})
 
 app.set('view engine', 'ejs');
 
@@ -157,7 +178,6 @@ app.post('/golive/:camName', async (req,res)=>{
 	
 	try {
 		console.log("Testing Auth Token...")
-		// Create live broadcast
 		const youtube = google.youtube({ version: 'v3', auth: oauth2Client });
 		console.log("Auth Token OK")
 		
