@@ -80,6 +80,10 @@ app.use(async (req, res, next) => {
 
 app.set('view engine', 'ejs');
 
+app.get('/', (req,res) => {
+	res.redirect('/golive')
+})
+
 app.get('/init', (req, res) => {
 	
 	// Generate a secure random state value.
