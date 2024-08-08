@@ -159,7 +159,7 @@ async function TransitionStream(youtube, broadcastId, retry=0){
 
 app.get('/streamControl/:camName', async (req,res)=>{
 	let camName = req.params["camName"]
-	if(!StreamManager.camExists(camName){
+	if(!StreamManager.camExists(camName)){
 		console.debug(`Cannot get control pannel for non-existant camera [${camName}]`)
 		res.status(404).render('error.ejs', {err: 404})
 		return
