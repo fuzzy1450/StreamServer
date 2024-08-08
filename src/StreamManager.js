@@ -19,19 +19,36 @@ class StreamManager{
 	}
 	
 	isLive(camName){
-		return this.Cameras[camName].streaming
+		if(this.Cameras[camName]) {
+			return this.Cameras[camName].streaming
+		} else {
+			console.log(`UNK1 camName: ${camName}`)
+			return false
+		}
 	}
 	
 	setLive(camName){
-		this.Cameras[camName].streaming=true
+		if(this.Cameras[camName]) {
+			this.Cameras[camName].streaming=true
+		} else {
+			console.log(`UNK2 camName: ${camName}`)
+			return false
+		}
 	}
 	
 	setUnLive(camName){
-		this.Cameras[camName].streaming=false
+		if(this.Cameras[camName]) {
+			this.Cameras[camName].streaming=false
+		} else {
+			console.log(`UNK3 camName: ${camName}`)
+			return false
+		}
 	}
 	
 	addCamera(CamObj){
 		this.Cameras[CamObj.name] = CamObj
+		console.log(this.Cameras[CamObj.name])
+		console.log(this.Cameras[CamObj.name].streaming)
 	}
 	
 	getCamera(camName){
