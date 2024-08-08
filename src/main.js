@@ -158,25 +158,27 @@ async function TransitionStream(youtube, broadcastId, retry=0){
 
 
 app.get('/streamControl/:camName', async (req,res)=>{
+	if(!ytcode){
+		res.redirect('/init')
+		return
+	}
+	
 	let camName = req.params["camName"]
 	if(!StreamManager.camExists(camName)){
 		console.debug(`Cannot get control pannel for non-existant camera [${camName}]`)
 		res.status(404).render('error.ejs', {err: 404})
 		return
 	}
-	if(ytcode){
-		// check if the stream is live
-		// if it is, send the youtube id.
-		let isLive = StreamManager.isLive(camName)
-		let id = null
-		if(isLive){
-			id = StreamManager.getStream(camName).id
-		}
-		
-		res.render('StreamControl.ejs', { camName: camName, isLive: isLive, id: id, root: __dirname+"/../" })
-	} else {
-		res.redirect('/init')
+	
+	// check if the stream is live
+	// if it is, send the youtube id.
+	let isLive = StreamManager.isLive(camName)
+	let id = null
+	if(isLive){
+		id = StreamManager.getStream(camName).id
 	}
+		
+	res.render('StreamControl.ejs', { camName: camName, isLive: isLive, id: id, root: __dirname+"/../" })
 })
 const weekday = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
 const month = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
