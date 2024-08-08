@@ -32,7 +32,6 @@ class StreamManager{
 			this.Cameras[camName].streaming=true
 		} else {
 			console.log(`UNK2 camName: ${camName}`)
-			return false
 		}
 	}
 	
@@ -41,14 +40,11 @@ class StreamManager{
 			this.Cameras[camName].streaming=false
 		} else {
 			console.log(`UNK3 camName: ${camName}`)
-			return false
 		}
 	}
 	
 	addCamera(CamObj){
 		this.Cameras[CamObj.name] = CamObj
-		console.log(this.Cameras[CamObj.name])
-		console.log(this.Cameras[CamObj.name].streaming)
 	}
 	
 	getCamera(camName){
