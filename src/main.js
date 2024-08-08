@@ -159,7 +159,12 @@ async function TransitionStream(youtube, broadcastId, retry=0){
 
 app.get('/streamControl/:camName', async (req,res)=>{
 	let camName = req.params["camName"]
-	if(ytcode && camName){
+	if(!StreamManager.camExists(camName){
+		console.debug(`Cannot get control pannel for non-existant camera [${camName}]`)
+		res.status(404).render('error.ejs', {err: 404})
+		return
+	}
+	if(ytcode){
 		// check if the stream is live
 		// if it is, send the youtube id.
 		let isLive = StreamManager.isLive(camName)
@@ -182,7 +187,14 @@ app.post('/golive/:camName', async (req,res)=>{
 		return
 	}
 	
+	
 	let camName = req.params["camName"]
+	if(!StreamManager.camExists(camName){
+		console.debug(`Cannot get control pannel for non-existant camera [${camName}]`)
+		res.status(404).render('error.ejs', {err: 404})
+		return
+	}
+	
 	
 	console.log("Initiating the Stream Process...")
 	
@@ -272,10 +284,17 @@ app.post('/golive/:camName', async (req,res)=>{
 app.post('/takedown/:camName', async (req,res)=>{ 	// might want to secure this - perhaps force a re-auth? 
 	let camName = req.params["camName"]				// that would prevent people from stopping their own streams.
 													// maybe dont let users do this - do it automatically after inactivity?
-	if(!ytcode || !camName){	
+	
+	if(!ytcode){	
 		res.redirect('/init')
 		return
 	}
+	if(!StreamManager.camExists(camName){
+		console.debug(`Cannot get control pannel for non-existant camera [${camName}]`)
+		res.status(404).render('error.ejs', {err: 404})
+		return
+	}
+	
 	console.log(`Request to Kill Stream on camera ${camName}`)
 	StreamManager.killStream(camName)
 	

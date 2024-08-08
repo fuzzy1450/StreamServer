@@ -5,9 +5,11 @@
 	case 403: %>
 		Error: 403 Forbidden
 		<% break;
-	
+	case 404: %>
+		Error: 404 Not Found
+		<% break;
 	default:%>
-		Error: <%=err %>
+		Unhandled Error: <%=err %>
 		<% break;
 }
 %>
