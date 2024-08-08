@@ -189,7 +189,7 @@ app.post('/golive/:camName', async (req,res)=>{
 	
 	
 	let camName = req.params["camName"]
-	if(!StreamManager.camExists(camName){
+	if(!StreamManager.camExists(camName)){
 		console.debug(`Cannot get control pannel for non-existant camera [${camName}]`)
 		res.status(404).render('error.ejs', {err: 404})
 		return
@@ -289,7 +289,7 @@ app.post('/takedown/:camName', async (req,res)=>{ 	// might want to secure this 
 		res.redirect('/init')
 		return
 	}
-	if(!StreamManager.camExists(camName){
+	if(!StreamManager.camExists(camName)){
 		console.debug(`Cannot get control pannel for non-existant camera [${camName}]`)
 		res.status(404).render('error.ejs', {err: 404})
 		return
