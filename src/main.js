@@ -130,8 +130,33 @@ app.get('/golive', (req,res)=>{
 	}
 })
 
-async function TransitionStream(youtube, broadcastId, retry=0){
-	if(!youtube){youtube = google.youtube({ version: 'v3', auth: oauth2Client })}
+async function TransitionToTesting(youtube, broadcastId, retry=0){
+	console.log("Attempting Stream Transition...")
+	return youtube.liveBroadcasts.transition({
+		part: 'id,status',
+		id: broadcastId,
+		broadcastStatus: 'testing',
+	})
+	.then((res)=>{
+		console.log(`Transitioned Stream after ${retry} attempts.`)
+		return res
+	})
+	.catch(async (err)=>{
+		console.log(`Stream Transition Failed. r=${retry}`)
+		console.log(err)
+		
+		if(retry<10){
+			await sleep(15000-(2000*retry))
+			return TransitionToTesting(youtube, broadcastId, retry+1)
+		} else {
+			console.log(`Failed to launch stream [${broadcastId}]`)
+			throw new Error(err)
+		}
+	})
+}
+
+
+async function TransitionToLive(youtube, broadcastId, retry=0){
 	await sleep(15000-(2000*retry))
 	console.log("Attempting Stream Transition...")
 	return youtube.liveBroadcasts.transition({
@@ -148,7 +173,7 @@ async function TransitionStream(youtube, broadcastId, retry=0){
 		console.log(err)
 		
 		if(retry<10){
-			return TransitionStream(youtube, broadcastId, retry+1)
+			return TransitionToLive(youtube, broadcastId, retry+1)
 		} else {
 			console.log(`Failed to launch stream [${broadcastId}]`)
 			throw new Error(err)
@@ -270,8 +295,11 @@ app.post('/golive/:camName', async (req,res)=>{
 		
 		console.log(`Stream Monitor ${broadcastId} is running`);
 		
+		console.log("Setting Stream to Ready.")
+		await TransitionToTesting(youtube, broadcastId)
+		
 		console.log("Attempting Stream Transition in 15 seconds.")
-		await TransitionStream(null, broadcastId)
+		await TransitionToLive(youtube, broadcastId)
 		
 		res.status(200).end()
 
