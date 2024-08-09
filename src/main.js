@@ -132,7 +132,7 @@ app.get('/golive', (req,res)=>{
 
 async function TransitionStream(youtube, broadcastId, retry=0){
 	if(!youtube){youtube = google.youtube({ version: 'v3', auth: oauth2Client })}
-	await sleep(45000+(2000*retry))
+	await sleep(25000-(2000*retry))
 	console.log("Attempting Stream Transition...")
 	return youtube.liveBroadcasts.transition({
 		part: 'id,status',
