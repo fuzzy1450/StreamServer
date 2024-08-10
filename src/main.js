@@ -142,6 +142,9 @@ async function TransitionToTesting(youtube, broadcastId, retry=0){
 		return res
 	})
 	.catch(async (err)=>{
+		if(err.errors[0].reason=="redundantTransition"){ // if this is the response, we can stop attempting
+			return err
+		}
 		console.log(`Stream Transition Failed. r=${retry}`)
 		console.log(err)
 		
