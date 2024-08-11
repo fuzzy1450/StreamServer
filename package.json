@@ -12,7 +12,7 @@
   },
   "keywords": [
     "Youtube",
-    "Stream",
+    "Stream", 
     "API"
   ],
   "dependencies": {
@@ -20,14 +20,16 @@
     "axios": "^1.7.3",
     "console-stamp": "^3.1.2",
     "crypto": "^1.0.1",
+    "dev-null": "^0.1.1",
     "ejs": "^3.1.10",
     "etc": "file:./etc",
     "express": "^4.19.2",
     "express-session": "^1.18.0",
+    "ftp-srv": "^4.6.3",
     "googleapis": "^140.0.1",
     "node-schedule": "^2.1.1",
     "open": "^10.1.0",
-    "public-ip": "^4.0.4",
+    "public-ip": "^7.0.1",
     "src": "file:./src",
     "views": "file:./views"
   },

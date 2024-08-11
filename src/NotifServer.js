@@ -1,30 +1,75 @@
 const {FtpSrv, FileSystem} = require('ftp-srv');
+const devnull = require('dev-null');
+
+devnull._destroy = function () {
+	return;
+}
 
 class DummyFS extends FileSystem {
-  constructor() {
-  }
+	constructor() {
+		super()
+	}
 
-  get(fileName) {
-    ...
-  }
+	get(fileName) {
+		return {}
+	}
+	
+	list(){
+		return []
+	}
+	chdir(){
+		return
+	}
+	mkdir(){
+		return
+	}
+	write(){
+		return {
+			stream: devnull(),
+			clientPath: "//"
+		}
+	}
+	read(){
+		return {
+			stream: devnull(),
+			clientPath: "//"
+		}
+	}
+	delete(){
+		throw new Error("Not allowed to delete files - and its a sin to try")
+	}
+	rename(){
+		return
+	}
+	chmod(){
+		return
+	}
+	getUniqueName(){
+		return "JohnDoe"
+	}
 }
 
 
 
 const port=21;
 const ftpServer = new FtpSrv({
-    url: "ftp://0.0.0.0:" + port,
-    anonymous: true
+    url: "ftp://192.168.50.235:" + port,
+	pasv_url: ()=>{return "192.168.50.235"}
 });
 
+
 ftpServer.on('login', ({ connection, username, password }, resolve, reject) => { 
-	
+	let camName = username
 	connection.on("STOR", (error, filePath) => {
-		if(username === 'superAdmin' && password === 'superPass'){
-			return reject(new errors.GeneralError('Upload Recieved; File Not Saved', 550)  
-		}
+		console.log(`File Store Attempted - Motion Detected on camera ${camName}`)
+		//TODO - signal the program that motion was detected on this camera
 	});
 	
+	
+	
+	if(password === 'superPass'){
+		resolve({fs: new DummyFS()}) 
+	}
     return reject(new errors.GeneralError('Request Type Not Permitted', 534));
 });
 
