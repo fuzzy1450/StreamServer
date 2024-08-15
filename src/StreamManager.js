@@ -2,11 +2,11 @@ const schedule = require('node-schedule')
 
 
 class StreamManager{
+	static #nightlyCleanup = schedule.scheduleJob('0 1 * * *', this.KillAllStreams);
+	
 	constructor(){
 		this.Streams = {}
 		this.Cameras = {}
-		
-		const nightlyCleanup = schedule.scheduleJob('0 1 * * *', this.KillAllStreams);
 	}
 	
 	addStream(camName, id, proc){
@@ -72,7 +72,7 @@ class StreamManager{
 		delete this.Streams[camName]
 	}
 	
-	KillAllStreams(){
+	static KillAllStreams(){
 		console.log("Killing All Streams...")
 		for(i in this.Streams){
 			this.killStream(i)

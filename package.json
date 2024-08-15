@@ -12,7 +12,7 @@
   },
   "keywords": [
     "Youtube",
-    "Stream", 
+    "Stream",
     "API"
   ],
   "dependencies": {
@@ -30,6 +30,7 @@
     "node-schedule": "^2.1.1",
     "open": "^10.1.0",
     "public-ip": "^7.0.1",
+    "public-ip-legacy": "npm:public-ip@^4.0.4",
     "src": "file:./src",
     "views": "file:./views"
   },

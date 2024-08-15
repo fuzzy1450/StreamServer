@@ -4,11 +4,12 @@ const {google} = require('googleapis');
 const crypto = require('crypto');
 const { spawn } = require('node:child_process');
 const {StreamManager} = require('src/StreamManager');
+const {NotifServer} = require('src/NotifServer');
 
 const express = require('express')
 const session = require('express-session');
 const axios = require('axios');
-const publicIp = require('public-ip');
+const publicIp = require('public-ip-legacy');
 
 const fs = require('fs');
 const http = require('http');
@@ -211,23 +212,7 @@ app.get('/streamControl/:camName', async (req,res)=>{
 const weekday = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
 const month = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
 
-app.post('/golive/:camName', async (req,res)=>{
-	if(!ytcode){
-		res.redirect('/init')
-		return
-	}
-	
-	
-	let camName = req.params["camName"]
-	if(!StreamManager.camExists(camName)){
-		console.debug(`Cannot get control pannel for non-existant camera [${camName}]`)
-		res.status(404).render('error.ejs', {err: 404})
-		return
-	}
-	
-	
-	console.log("Initiating the Stream Process...")
-	
+async function InitiateBroadcast(camName){
 	try {
 		console.log("Testing Auth Token...")
 		const youtube = google.youtube({ version: 'v3', auth: oauth2Client });
@@ -303,14 +288,36 @@ app.post('/golive/:camName', async (req,res)=>{
 		
 		console.log("Attempting Stream Transition in 15 seconds.")
 		await TransitionToLive(youtube, broadcastId)
-		
-		res.status(200).end()
-
-		
 	} 
 	catch (error) {
 		console.error('Error creating livestream:', error);
 		res.status(500).send('Error creating livestream');
+	}
+}
+
+
+app.post('/golive/:camName', async (req,res)=>{
+	if(!ytcode){
+		res.redirect('/init')
+		return
+	}
+	
+	
+	let camName = req.params["camName"]
+	if(!StreamManager.camExists(camName)){
+		console.debug(`Cannot go live with non-existant camera [${camName}]`)
+		res.status(404).render('error.ejs', {err: 404})
+		return
+	}
+	
+	if(StreamManager.isLive(camName)){
+		res.status(409).end()
+	} else {		
+		console.log("Initiating the Stream Process...")
+		
+		await InitiateBroadcast(camName)
+			
+		res.status(200).end()
 	}
 })
 
@@ -323,7 +330,7 @@ app.post('/takedown/:camName', async (req,res)=>{ 	// might want to secure this 
 		return
 	}
 	if(!StreamManager.camExists(camName)){
-		console.debug(`Cannot get control pannel for non-existant camera [${camName}]`)
+		console.debug(`Cannot take down a stream from a non-existant camera [${camName}]`)
 		res.status(404).render('error.ejs', {err: 404})
 		return
 	}
@@ -333,7 +340,6 @@ app.post('/takedown/:camName', async (req,res)=>{ 	// might want to secure this 
 	
 	res.status(200).end()
 })
-
 
 
 async function StartStream(StreamKey, StreamAddr, camName){
