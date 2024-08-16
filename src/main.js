@@ -132,6 +132,7 @@ app.get('/golive', (req,res)=>{
 })
 
 async function TransitionToTesting(youtube, broadcastId, retry=0){
+	await sleep(10000-(5000*retry))
 	console.log("Attempting Stream Transition...")
 	return youtube.liveBroadcasts.transition({
 		part: 'id,status',
@@ -147,10 +148,8 @@ async function TransitionToTesting(youtube, broadcastId, retry=0){
 			return err
 		}
 		console.log(`Stream Transition Failed. r=${retry}`)
-		console.log(err)
 		
 		if(retry<10){
-			await sleep(15000-(2000*retry))
 			return TransitionToTesting(youtube, broadcastId, retry+1)
 		} else {
 			console.log(`Failed to launch stream [${broadcastId}]`)
@@ -161,7 +160,6 @@ async function TransitionToTesting(youtube, broadcastId, retry=0){
 
 
 async function TransitionToLive(youtube, broadcastId, retry=0){
-	await sleep(15000-(2000*retry))
 	console.log("Attempting Stream Transition...")
 	return youtube.liveBroadcasts.transition({
 		part: 'id,status',
@@ -174,9 +172,9 @@ async function TransitionToLive(youtube, broadcastId, retry=0){
 	})
 	.catch(async (err)=>{
 		console.log(`Stream Transition Failed. r=${retry}`)
-		console.log(err)
 		
 		if(retry<10){
+			await sleep(10000-(2000*retry))
 			return TransitionToLive(youtube, broadcastId, retry+1)
 		} else {
 			console.log(`Failed to launch stream [${broadcastId}]`)
@@ -298,6 +296,7 @@ async function InitiateBroadcast(camName){
 
 app.post('/golive/:camName', async (req,res)=>{
 	if(!ytcode){
+		console.log(`Did not go live - No Auth`)
 		res.redirect('/init')
 		return
 	}

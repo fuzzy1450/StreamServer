@@ -1,130 +1,45 @@
 const {FtpSrv, FileSystem} = require('ftp-srv');
-const devnull = require('dev-null')({write:function(c,e,cb){cb()},destroy:function(err,cb){this.destroyed = true; return (cb ? cb() : null)}});
+const {PassThrough} = require('stream')
 const schedule = require('node-schedule')
 const axios = require('axios');
+const bunyan = require('bunyan');
+const pretty = require('@mechanicalhuman/bunyan-pretty');
+const fs = require('fs')
+const nodePath = require('path');
 
-dnp = new Proxy(devnull, { // dnp - devnull proxy
-	get(t, n, r){	// these attributes are used to trick Ftp-Srv that it is a writable socket/stream
-		
-		switch(n.toString()){
-			case 'then':
-				var value = t[n];
-				return typeof value == 'function' ? value.bind(t) : value
-			case 'end':
-				var value = t[n];
-				console.log(value)
-				return typeof value == 'function' ? value.bind(t) : value
-			case 'path':
-				var value = t[n];
-				return typeof value == 'function' ? value.bind(t) : value
-			case '_writeOut':
-				var value = t[n];
-				return typeof value == 'function' ? value.bind(t) : value
-			case '_write':
-				var value = t[n];
-				return typeof value == 'function' ? value.bind(t) : value
-			case '_eventsCount':
-				var value = t[n];
-				return typeof value == 'function' ? value.bind(t) : value
-			case '_maxListeners':
-				var value = t[n];
-				return typeof value == 'function' ? value.bind(t) : value
-			case 'writableNeedDrain':
-				var value = t[n];
-				return typeof value == 'function' ? value.bind(t) : value
-			case 'destroy':
-				var value = function(err, cb){this._destroy(null, cb); return this};
-				console.log(`${t} | ${n.toString()} | ${value}`)
-				return typeof value == 'function' ? value.bind(t) : value
-			case '_destroy':
-				var value = t[n];
-				return typeof value == 'function' ? value.bind(t) : value
-			case '_final':
-				var value = t[n];
-				return typeof value == 'function' ? value.bind(t) : value
-			case 'write':
-				var value = t[n];
-				return typeof value == 'function' ? value.bind(t) : value
-			case 'writable':
-				var value = t[n];
-				return typeof value == 'function' ? value.bind(t) : value
-			case '_events':
-				var value = t[n];
-				return typeof value == 'function' ? value.bind(t) : value
-			case 'listenerCount':
-				var value = t[n];
-				return typeof value == 'function' ? value.bind(t) : value
-			case 'emit':
-				var value = t[n];
-				return typeof value == 'function' ? value.bind(t) : value
-			case 'on':
-				var value = t[n];
-				return typeof value == 'function' ? value.bind(t) : value
-			case 'once':
-				var value = t[n];
-				return typeof value == 'function' ? value.bind(t) : value
-			case 'prependListener':
-				var value = t[n];
-				return typeof value == 'function' ? value.bind(t) : value
-			case 'removeListener':
-				var value = t[n];
-				return typeof value == 'function' ? value.bind(t) : value
-			case '_writableState':
-				var value = t[n];
-				return typeof value == 'function' ? value.bind(t) : value
-			case '_readableState':
-				return false
-			case 'Symbol(shapeMode)':
-				var value = t[n];
-				return typeof value == 'function' ? value.bind(t) : value
-		}
-		console.debug(`unknown dnp get - [${n.toString()}]`) // if the ftp server is spitting socket or stream errors at you, this will help
-		console.debug(t[n])
-		var value = t[n];
-		return typeof value == 'function' ? value.bind(t) : value
-	}
-	
-})
-	
+
 
 class DummyFS extends FileSystem {
 	constructor() {
 		super()
 	}
-
 	get(fileName) {
-		return {}
-	}
-	
-	list(){
-		return []
-	}
-	chdir(){
-		return
+		return super.get("resources/blicky.webp")
 	}
 	mkdir(){
 		return
 	}
 	write(){
-		return {
-			stream: dnp,
-			clientPath: "//"
-		}
+		let x = super.write("resources/blicky.webp")
+		let stream = new PassThrough()
+		stream.once('close', () => stream.end());
+		return {stream: stream, clientPath: "resources/blicky.webp"}
 	}
-	read(){
+	read(FN){
+		let x = super.read("resources/blicky.webp")
 		return {
-			stream: dnp,
-			clientPath: "//"
+			stream: new PassThrough(),
+			clientPath: x.clientPath
 		}
 	}
 	delete(){
 		return
 	}
 	rename(){
-		return
+		return 
 	}
 	chmod(){
-		return
+		return Promise.resolve(true)
 	}
 	getUniqueName(){
 		return "JohnDoe"
@@ -159,17 +74,23 @@ class PulseHandler {
 	}
 	
 	initPulse(){
-		console.log(`Received Initial Pulse from ${this.camName}`)
-		axios.post(`http://localhost:8080/golive/${this.camName}`)
+		let camObj = this
+		console.log(`Received Initial Pulse from ${camObj.camName}`)
+		axios.post(`http://localhost:8080/golive/${camObj.camName}`)
 		.then((res)=>{
-			//console.log(res)
+			if(res.request._redirectable._redirectCount){ // if the request was redirected, there is likely no auth and the cam didnt go live
+				camObj.lastPulse = new Date(-1)
+			} else {
+				camObj.pulseCheck = schedule.scheduleJob('*/5 * * * *', PulseHandler.checkNeck.bind(null, camObj.camName));
+				// this schedule will run every 5th minute (00:05, 00:10, 00:15) 
+			}
 			return
 		})
 		.catch((err)=>{
-			//console.log(err)
+			console.warn("init pulse err")
+			console.dir(err)
 			return
 		})
-		this.pulseCheck = schedule.scheduleJob('*/5 * * * *', PulseHandler.checkNeck.bind(null, this.camName));
 	}
 	
 	declareDead(timeDelt){
@@ -188,6 +109,7 @@ class PulseHandler {
 	}
 	
 	static checkNeck(camName){
+		console.debug(`Checking the neck of camera ${camName}`)
 		let handle = PulseHandler.getHandle(camName)
 		
 		let timeDelt = (new Date()).getTime() - handle.lastPulse.getTime();
@@ -200,11 +122,13 @@ class PulseHandler {
 
 const port=21;
 const ftpServer = new FtpSrv({
-    url: "ftp://192.168.50.235:" + port,
-	pasv_url: ()=>{return "192.168.50.235"},
-	pasv_min: 5359,
-	pasv_max: 5360,
-	greeting: ['Howdy','Howdy']
+    url: "ftp://192.168.50.45:" + port,
+	greeting: ['Howdy','Howdy'],
+	log: bunyan.createLogger({
+        name: 'ftpsrv',
+		stream: pretty(process.stdout),
+        level: 'fatal'
+    })
 });
 
 const camNumMap = { // a map of each camera's channel # to it's pulse handler
@@ -235,17 +159,21 @@ ftpServer.on('login', ({ connection, username, password }, resolve, reject) => {
 		}
 	});
 	
-	
-	
 	if(username == 'superAdmin' && password === 'superPass'){
-		resolve({fs: new DummyFS()}) 
+		return resolve({fs: new DummyFS()}) 
+	} else {
+		return reject(new errors.GeneralError('Bad Auth 534'));
 	}
-    return reject(new errors.GeneralError('Request Type Not Permitted', 534));
+});
+
+ftpServer.on('client-error', ({connection, context, error}) => { 
+	console.warn("client error")
+	console.dir(error)
 });
 
 
 ftpServer.listen().then(() => { 
-    console.log('Ftp server is listening...')
+    console.log(`Ftp server is listening on port ${port}...`)
 });
 
 

@@ -2,3 +2,4 @@ auth/*
 !auth/GenerateKeysSSL.bat
 
 node_modules
+logs

@@ -16,11 +16,11 @@
     "API"
   ],
   "dependencies": {
+    "@mechanicalhuman/bunyan-pretty": "^3.1.0",
     "auth": "file:./auth",
     "axios": "^1.7.3",
     "console-stamp": "^3.1.2",
     "crypto": "^1.0.1",
-    "dev-null": "^0.1.1",
     "ejs": "^3.1.10",
     "etc": "file:./etc",
     "express": "^4.19.2",
