@@ -14,19 +14,19 @@ class DummyFS extends FileSystem {
 		super()
 	}
 	get(fileName) {
-		return super.get("resources/blicky.webp")
+		return super.get("resources/NUFFIN.ATALL")
 	}
 	mkdir(){
 		return
 	}
 	write(){
-		let x = super.write("resources/blicky.webp")
+		let x = super.write("resources/NUFFIN.ATALL")
 		let stream = new PassThrough()
 		stream.once('close', () => stream.end());
-		return {stream: stream, clientPath: "resources/blicky.webp"}
+		return {stream: stream, clientPath: "resources/NUFFIN.ATALL"}
 	}
 	read(FN){
-		let x = super.read("resources/blicky.webp")
+		let x = super.read("resources/NUFFIN.ATALL")
 		return {
 			stream: new PassThrough(),
 			clientPath: x.clientPath
