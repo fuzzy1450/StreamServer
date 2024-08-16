@@ -133,14 +133,14 @@ app.get('/golive', (req,res)=>{
 
 async function TransitionToTesting(youtube, broadcastId, retry=0){
 	await sleep(10000-(5000*retry))
-	console.log("Attempting Stream Transition...")
+	console.log("Attempting Stream Transition to Testing...")
 	return youtube.liveBroadcasts.transition({
 		part: 'id,status',
 		id: broadcastId,
 		broadcastStatus: 'testing',
 	})
 	.then((res)=>{
-		console.log(`Transitioned Stream after ${retry} attempts.`)
+		console.log(`Transitioned Stream to Testing after ${retry} attempts.`)
 		return res
 	})
 	.catch(async (err)=>{
@@ -160,14 +160,14 @@ async function TransitionToTesting(youtube, broadcastId, retry=0){
 
 
 async function TransitionToLive(youtube, broadcastId, retry=0){
-	console.log("Attempting Stream Transition...")
+	console.log("Attempting Stream Transition to Live...")
 	return youtube.liveBroadcasts.transition({
 		part: 'id,status',
 		id: broadcastId,
 		broadcastStatus: 'live',
 	})
 	.then((res)=>{
-		console.log(`Transitioned Stream after ${retry} attempts.`)
+		console.log(`Transitioned Stream to Live after ${retry} attempts.`)
 		return res
 	})
 	.catch(async (err)=>{
