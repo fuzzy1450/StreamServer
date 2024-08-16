@@ -49,7 +49,9 @@ function loadStream(camName){
 	
 	start_load_helper()
 	
-	return fetch(`/golive/${camName}`, {method: 'POST'})
+	title = document.getElementById('StreamName').value
+	
+	return fetch(`/golive/${camName}`, {method: 'POST', headers:{"Content-Type":"application/json"}, body: JSON.stringify({title:title})})
 	.then(function(response) {
 		if (response.ok) {
 			window.location.reload()

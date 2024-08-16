@@ -66,6 +66,8 @@ app.use(session({
 	cookie: { secure: true, maxAge: 10000 }
 }))
 
+app.use(express.json());
+
 app.use(async (req, res, next) => {
 	if(req.session.authed) {
 		next()
@@ -210,7 +212,7 @@ app.get('/streamControl/:camName', async (req,res)=>{
 const weekday = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
 const month = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
 
-async function InitiateBroadcast(camName){
+async function InitiateBroadcast(camName, StreamTitle){
 	try {
 		console.log("Testing Auth Token...")
 		const youtube = google.youtube({ version: 'v3', auth: oauth2Client });
@@ -218,12 +220,11 @@ async function InitiateBroadcast(camName){
 		
 		console.log("Creating Broadcast...")
 		let rn = new Date()
-		let TitleDate = `${weekday[rn.getDay()]}, ${month[rn.getMonth()]} ${rn.getDate()} ${rn.getFullYear()} `
 		const broadcastResponse = await youtube.liveBroadcasts.insert({
 		  part: 'snippet,status',
 		  requestBody: {
 			snippet: {
-			  title: `${camName} - ${TitleDate}`,
+			  title: StreamTitle,
 			  scheduledStartTime: rn.toISOString()
 			},
 			status: {
@@ -288,8 +289,8 @@ async function InitiateBroadcast(camName){
 		await TransitionToLive(youtube, broadcastId)
 	} 
 	catch (error) {
-		console.error('Error creating livestream:', error);
-		res.status(500).send('Error creating livestream');
+		console.error('Error creating livestream');
+		throw error
 	}
 }
 
@@ -300,7 +301,14 @@ app.post('/golive/:camName', async (req,res)=>{
 		res.redirect('/init')
 		return
 	}
-	
+	let title = ""
+	if(req.body.title && req.body.title != ""){
+		title = req.body.title
+	} else {
+		let rn = new Date()
+		let TitleDate = `${weekday[rn.getDay()]}, ${month[rn.getMonth()]} ${rn.getDate()} ${rn.getFullYear()} `
+		title = `${camName} - ${TitleDate}`
+	}
 	
 	let camName = req.params["camName"]
 	if(!StreamManager.camExists(camName)){
@@ -314,7 +322,7 @@ app.post('/golive/:camName', async (req,res)=>{
 	} else {		
 		console.log("Initiating the Stream Process...")
 		
-		await InitiateBroadcast(camName)
+		await InitiateBroadcast(camName, title)
 			
 		res.status(200).end()
 	}
