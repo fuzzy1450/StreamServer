@@ -301,6 +301,14 @@ app.post('/golive/:camName', async (req,res)=>{
 		res.redirect('/init')
 		return
 	}
+
+	let camName = req.params["camName"]
+	if(!StreamManager.camExists(camName)){
+		console.debug(`Cannot go live with non-existant camera [${camName}]`)
+		res.status(404).render('error.ejs', {err: 404})
+		return
+	}
+	
 	let title = ""
 	if(req.body.title && req.body.title != ""){
 		title = req.body.title
@@ -308,13 +316,6 @@ app.post('/golive/:camName', async (req,res)=>{
 		let rn = new Date()
 		let TitleDate = `${weekday[rn.getDay()]}, ${month[rn.getMonth()]} ${rn.getDate()} ${rn.getFullYear()} `
 		title = `${camName} - ${TitleDate}`
-	}
-	
-	let camName = req.params["camName"]
-	if(!StreamManager.camExists(camName)){
-		console.debug(`Cannot go live with non-existant camera [${camName}]`)
-		res.status(404).render('error.ejs', {err: 404})
-		return
 	}
 	
 	if(StreamManager.isLive(camName)){
