@@ -1,10 +1,10 @@
 const {FtpSrv, FileSystem} = require('ftp-srv');
-const {PassThrough} = require('stream')
-const schedule = require('node-schedule')
+const {PassThrough} = require('stream');
+const schedule = require('node-schedule');
 const axios = require('axios');
 const bunyan = require('bunyan');
 const pretty = require('@mechanicalhuman/bunyan-pretty');
-const fs = require('fs')
+const fs = require('fs');
 const nodePath = require('path');
 
 
