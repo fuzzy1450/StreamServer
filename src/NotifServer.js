@@ -175,7 +175,8 @@ ftpServer.on('login', ({ connection, username, password }, resolve, reject) => {
 			let pulseHandle = camNumMap[camNum]			// the ## will correspond to the camera's channel on the NVR.
 														// ive mapped the existing channel nums to the camera handles in camNameMap
 														
-			console.debug(`File Store Attempted - Motion Detected on camera ${pulseHandle.camName}`)
+			// console.debug(`File Store Attempted - Motion Detected on camera ${pulseHandle.camName}`)
+			// debug line here for posterity's sake - this was crucial in getting the filesystem to work
 			pulseHandle.Pulse()
 		}
 	});
