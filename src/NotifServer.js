@@ -76,7 +76,7 @@ class PulseHandler {
 	initPulse(){
 		let camObj = this
 		console.log(`Received Initial Pulse from ${camObj.camName}`)
-		axios.post(`http://localhost:8080/golive/${camObj.camName}`)
+		axios.post(`http://localhost:8080/golive/${camObj.camName}`, {title:"Nightly Pool Stream"})
 		.then((res)=>{
 			if(res.request._redirectable._redirectCount){ // if the request was redirected, there is likely no auth and the cam didnt go live
 				camObj.lastPulse = new Date(-1)
