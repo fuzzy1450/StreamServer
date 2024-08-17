@@ -91,9 +91,10 @@ class PulseHandler {
 		axios.post(`http://localhost:8080/golive/${camObj.camName}`, {title:"Nightly Pool Stream"})
 		.then((res)=>{
 			if(res.request._redirectable._redirectCount){ // if the request was redirected, there is likely no auth and the cam didnt go live
+				console.warn("Failed to start Autostream - possibly not authed")
 				return 
 			} else {
-				camObj.setUp()
+				console.debug("Autostream Started")
 				return
 			}
 		})
