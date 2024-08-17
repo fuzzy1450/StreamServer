@@ -4,7 +4,7 @@ const {google} = require('googleapis');
 const crypto = require('crypto');
 const { spawn } = require('node:child_process');
 const {StreamManager} = require('src/StreamManager');
-const {NotifServer} = require('src/NotifServer');
+const {NotifServer, PulseHandler} = require('src/NotifServer');
 
 const express = require('express')
 const session = require('express-session');
@@ -273,6 +273,7 @@ async function InitiateBroadcast(camName, StreamTitle){
 		
 		console.log("Starting FFMPEG...")
 		StreamManager.addStream(camName, broadcastId, await StartStream(StreamKey, Addr, camName))
+		PulseHandler.getHandle(camName).setUp()
 		console.log('FFMPEG is running');
 		
 		

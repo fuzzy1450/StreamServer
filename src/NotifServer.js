@@ -46,6 +46,13 @@ class DummyFS extends FileSystem {
 	}
 }
 
+function autoStreamable(camName, time){
+	// we only do auto-streaming after 7pm, and only on camera 5
+	// this function returns true or false, if the given camera name is allowed to start streaming at the given time
+	// this could be made more complex, to allow for more cameras at more times.
+	return ((camName == "PH_Pool_5") && (time.getHours() >= 19))
+}
+
 class PulseHandler {
 	static pulseTimeout = 1000 * 60 * 30 // 30 minutes (ms)
 	static #Handles = []
@@ -53,6 +60,7 @@ class PulseHandler {
 	
 	constructor (camName){
 		this.lastPulse = new Date(-1)
+		this.up = false
 		this.pulseCheck = null // when initPulse is called, this will be a scheduled job to make sure the cam pulses are live
 		this.camName = camName
 		PulseHandler.#Handles.push(this)
@@ -67,30 +75,40 @@ class PulseHandler {
 	}
 	
 	Pulse(){
-		if(this.lastPulse.getTime() == new Date(-1).getTime()) {
-			this.initPulse()
+		let rn = new Date()
+		console.info(`Pulse recieved for camera ${this.camName}`)
+		let ableToGoLive = autoStreamable(this.camName, rn)
+		if ((!this.up) && ableToGoLive) {
+			return this.initPulse()
 		}
-		this.lastPulse = new Date()
+		console.debug(`Stream not initialized - up:${this.up} && aS?:${ableToGoLive}`)
+		this.lastPulse = rn
 	}
 	
 	initPulse(){
 		let camObj = this
-		console.log(`Received Initial Pulse from ${camObj.camName}`)
+		console.log(`Starting autostream for ${camObj.camName}`)
 		axios.post(`http://localhost:8080/golive/${camObj.camName}`, {title:"Nightly Pool Stream"})
 		.then((res)=>{
 			if(res.request._redirectable._redirectCount){ // if the request was redirected, there is likely no auth and the cam didnt go live
-				camObj.lastPulse = new Date(-1)
+				return 
 			} else {
-				camObj.pulseCheck = schedule.scheduleJob('*/5 * * * *', PulseHandler.checkNeck.bind(null, camObj.camName));
-				// this schedule will run every 5th minute (00:05, 00:10, 00:15) 
+				camObj.setUp()
+				return
 			}
-			return
 		})
 		.catch((err)=>{
 			console.warn("init pulse err")
 			console.dir(err)
 			return
 		})
+	}
+	
+	setUp(){
+		console.debug(`Created task to check ${this.camName}`)
+		this.up = true
+		this.pulseCheck = schedule.scheduleJob('*/5 * * * *', PulseHandler.checkNeck.bind(null, this.camName));
+		// this schedule will run every 5th minute (00:05, 00:10, 00:15) 
 	}
 	
 	declareDead(timeDelt){
@@ -104,7 +122,7 @@ class PulseHandler {
 			//console.log(err)
 			return
 		})
-		this.lastPulse = new Date(-1)
+		this.up = false
 		this.pulseCheck.cancel()
 	}
 	
@@ -115,7 +133,9 @@ class PulseHandler {
 		let timeDelt = (new Date()).getTime() - handle.lastPulse.getTime();
 		
 		if( timeDelt > PulseHandler.pulseTimeout ){
-			handle.declareDead(timeDelt)
+			return handle.declareDead(timeDelt)
+		} else {
+			console.debug(`Pulse detected - ${timeDelt/1000/60}mins ago`)
 		}
 	}
 }
@@ -179,4 +199,5 @@ ftpServer.listen().then(() => {
 
 
 exports.NotifServer = ftpServer
+exports.PulseHandler = PulseHandler
 
