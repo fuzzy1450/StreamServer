@@ -10,6 +10,8 @@ const express = require('express')
 const session = require('express-session');
 const axios = require('axios');
 const publicIp = require('public-ip-legacy');
+const favicon = require('serve-favicon');
+const path = require('path')
 
 const fs = require('fs');
 const http = require('http');
@@ -82,6 +84,12 @@ app.use(async (req, res, next) => {
 		}
 	}
 })
+
+
+let faviconPath = path.join(__dirname, '..', 'resources', 'favicon.ico')
+console.log(faviconPath)
+
+app.use(favicon(faviconPath, {maxAge: 1000}))
 
 app.set('view engine', 'ejs');
 
@@ -408,9 +416,7 @@ app.get('/resources/:resource', (req, res) => {
 	res.sendFile(ResourceName, { root: __dirname+"/../resources" })
 })
 
-app.get('/favicon.ico', (req, res) => {
-		res.sendFile("favicon.ico", { root: __dirname+"/../resources" })
-})
+
 
 app.get('/snapshot/:camName', async (req,res)=>{
 	let camName = req.params["camName"]

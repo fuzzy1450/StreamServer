@@ -122,3 +122,8 @@ body {
 	color: white;
 	text-align:center;
 }
+
+#CenterLogo {
+	height:200px;
+	margin-top: 7px;
+}

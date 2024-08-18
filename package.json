@@ -31,6 +31,7 @@
     "open": "^10.1.0",
     "public-ip": "^7.0.1",
     "public-ip-legacy": "npm:public-ip@^4.0.4",
+    "serve-favicon": "^2.5.0",
     "src": "file:./src",
     "views": "file:./views"
   },
