@@ -113,7 +113,7 @@ class PulseHandler {
 	}
 	
 	declareDead(timeDelt){
-		console.log(`Declaring ${this.camName} dead - ${timeDelt/1000/60}mins since last pulse`)
+		console.log(`Declaring ${this.camName} dead - ${timeDelt/(1000*60)}mins since last pulse`)
 		axios.post(`http://localhost:8080/takedown/${this.camName}`)
 		.then((res)=>{
 			//console.log(res)
@@ -136,7 +136,7 @@ class PulseHandler {
 		if( timeDelt > PulseHandler.pulseTimeout ){
 			return handle.declareDead(timeDelt)
 		} else {
-			console.debug(`Pulse detected - ${timeDelt/1000/60}mins ago`)
+			console.debug(`Pulse detected - ${timeDelt/(1000*60)}mins ago`)
 		}
 	}
 }
