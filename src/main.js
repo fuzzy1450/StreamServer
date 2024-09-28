@@ -87,7 +87,6 @@ app.use(async (req, res, next) => {
 
 
 let faviconPath = path.join(__dirname, '..', 'resources', 'favicon.ico')
-console.log(faviconPath)
 
 app.use(favicon(faviconPath, {maxAge: 1000}))
 
