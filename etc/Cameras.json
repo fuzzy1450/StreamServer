@@ -40,5 +40,12 @@
 		"channel": "05",
 		"snap_chan": "04",
 		"streaming": false
+	},
+	{
+		"name": "PH_Pool_2",
+		"cam_ip": "215",
+		"channel": "06",
+		"snap_chan": "05",
+		"streaming": false
 	}
 ]
