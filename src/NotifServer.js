@@ -133,10 +133,10 @@ class PulseHandler {
 		let timeDelt = (new Date()).getTime() - handle.lastPulse.getTime();
 		
 		if( timeDelt > PulseHandler.pulseTimeout ){
-			console.debug(`${camName} appears to be expired. Last pulse was ${timeDelt/(1000*60)}mins ago (> ${pulseHandler.pulseTimeout/(1000*60)}min). Declaring it dead...`)
+			console.debug(`${camName} appears to be expired. Last pulse was ${timeDelt/(1000*60)}mins ago (> ${PulseHandler.pulseTimeout/(1000*60)}min). Declaring it dead...`)
 			return handle.declareDead(timeDelt)
 		} else {
-			console.debug(`Pulse detected - ${timeDelt/(1000*60)}mins ago`)
+			console.debug(`Life detected ${timeDelt/(1000*60)}mins ago`)
 		}
 	}
 }
