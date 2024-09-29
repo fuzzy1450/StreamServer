@@ -107,7 +107,7 @@ class PulseHandler {
 	setUp(){
 		console.debug(`Created task to check ${this.camName}`)
 		this.up = true
-		this.pulseCheck = schedule.scheduleJob('*/5 * * * *', PulseHandler.checkNeck.bind(null, this.camName));
+		this.pulseCheck = schedule.scheduleJob('*/1 * * * *', PulseHandler.checkNeck.bind(null, this.camName));
 		// this schedule will run every 5th minute (00:05, 00:10, 00:15) 
 	}
 	
