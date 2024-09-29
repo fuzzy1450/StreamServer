@@ -79,7 +79,7 @@ class PulseHandler {
 		console.debug(`motion pulse ${this.camName}`)
 		let ableToGoLive = autoStreamable(this.camName, rn)
 		if ((!this.up) && ableToGoLive) {
-			return this.initPulse()
+			this.initPulse()
 		}
 		this.lastPulse = rn
 	}
