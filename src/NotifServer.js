@@ -50,7 +50,7 @@ function autoStreamable(camName, time){
 	// we only do auto-streaming after 7pm, and only on camera 5
 	// this function returns true or false, if the given camera name is allowed to start streaming at the given time
 	// this could be made more complex, to allow for more cameras at more times.
-	return ((camName == "PH_Pool_5") && (time.getHours() >= 19))
+	return ((camName == "PH_Pool_4") && (time.getHours() >= 19))
 }
 
 class PulseHandler {
