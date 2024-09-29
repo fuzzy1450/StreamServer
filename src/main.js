@@ -411,7 +411,7 @@ async function StartStream(StreamKey, StreamAddr, camName){
 
 app.get('/resources/:resource', (req, res) => {
 	let ResourceName = req.params.resource
-	console.debug(`[${req.ip}] Requested Resource ${ResourceName}`)
+	console.log(`[${req.ip}] Requested Resource ${ResourceName}`)
 	res.sendFile(ResourceName, { root: __dirname+"/../resources" })
 })
 

@@ -76,12 +76,11 @@ class PulseHandler {
 	
 	Pulse(){
 		let rn = new Date()
-		console.info(`Pulse recieved for camera ${this.camName}`)
+		console.debug(`motion pulse ${this.camName}`)
 		let ableToGoLive = autoStreamable(this.camName, rn)
 		if ((!this.up) && ableToGoLive) {
 			return this.initPulse()
 		}
-		console.debug(`Stream not initialized - up:${this.up} && aS?:${ableToGoLive}`)
 		this.lastPulse = rn
 	}
 	
@@ -134,6 +133,7 @@ class PulseHandler {
 		let timeDelt = (new Date()).getTime() - handle.lastPulse.getTime();
 		
 		if( timeDelt > PulseHandler.pulseTimeout ){
+			console.debug(`${camName} appears to be expired. Last pulse was ${timeDelt/(1000*60)}mins ago (> ${pulseHandler.pulseTimeout/(1000*60)}min). Declaring it dead...`)
 			return handle.declareDead(timeDelt)
 		} else {
 			console.debug(`Pulse detected - ${timeDelt/(1000*60)}mins ago`)
