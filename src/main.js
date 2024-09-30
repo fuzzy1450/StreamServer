@@ -71,7 +71,11 @@ app.use(session({
 app.use(express.json());
 
 app.use(async (req, res, next) => {
-	if(req.session.authed) {
+	if(req.originalUrl.toLowerCase()=="/robots.txt") {
+		console.info(`Robot detected @ ${req.ip}`)
+		res.send("User-agent: *\n\nDisallow: /")
+	
+	} else if(req.session.authed) {
 		next()
 	} else {
 		let authed = await networkAuth(req.ip)
@@ -433,6 +437,10 @@ app.get('/snapshot/:camName', async (req,res)=>{
 	
 	response.data.pipe(res)
 	
+})
+
+app.post('/getRecording', async (req,res)=>{
+	return
 })
 
 
