@@ -47,5 +47,47 @@
 		"channel": "06",
 		"snap_chan": "05",
 		"streaming": false
+	},
+	{
+		"name": "PH_Pool_9",
+		"cam_ip": "215",
+		"channel": "09",
+		"snap_chan": "08",
+		"streaming": false
+	},
+	{
+		"name": "PH_Pool_10",
+		"cam_ip": "215",
+		"channel": "10",
+		"snap_chan": "09",
+		"streaming": false
+	},
+	{
+		"name": "PH_Pool_11",
+		"cam_ip": "215",
+		"channel": "11",
+		"snap_chan": "10",
+		"streaming": false
+	},
+	{
+		"name": "PH_Pool_12",
+		"cam_ip": "215",
+		"channel": "12",
+		"snap_chan": "11",
+		"streaming": false
+	},
+	{
+		"name": "PH_Pool_13",
+		"cam_ip": "215",
+		"channel": "13",
+		"snap_chan": "12",
+		"streaming": false
+	},
+	{
+		"name": "PH_Pool_14",
+		"cam_ip": "215",
+		"channel": "14",
+		"snap_chan": "13",
+		"streaming": false
 	}
 ]
