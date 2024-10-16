@@ -152,16 +152,22 @@ const ftpServer = new FtpSrv({
     })
 });
 
-const camNumMap = { // a map of each camera's channel # to it's pulse handler
-	"00": new PulseHandler("PH_Pool_6"),	// TODO: Auto-generate this from Cameras.json
-	"01": new PulseHandler("PH_Pool_3"),
-	"02": new PulseHandler("PH_Pool_5"),
-	"03": new PulseHandler("PH_Pool_4"),
-	"04": new PulseHandler("PH_Pool_7"),
-	"05": new PulseHandler("PH_Pool_2"),
-	"06": new PulseHandler("PH_Pool_1"),
-	"07": new PulseHandler("PH_Pool_8")
+	
+
+
+const loadCameras = () => { // generates a map of each camera's snap channel # to it's pulse handler, based on ../ect/Cameras.JSON
+	let camMap = {}
+	let camJSON = JSON.parse(fs.readFileSync("./etc/Cameras.json"));
+	for (let i in camJSON) {
+		let this_cam = camJSON[i];
+		camMap[this_cam.snap_chan] = new PulseHandler(this_cam.name)
+	
+		console.log(`"${this_cam.snap_chan}": new PulseHandler("${this_cam.name}")`)
+	}
+	return camMap;
 }
+
+const camNumMap = loadCameras();
 
 
 ftpServer.on('login', ({ connection, username, password }, resolve, reject) => { 
