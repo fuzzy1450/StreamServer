@@ -22,7 +22,11 @@ const HTTPSPort = 8443
 
 const privateKey  = fs.readFileSync('auth/selfsign.key', 'utf8');
 const certificate = fs.readFileSync('auth/selfsign.crt', 'utf8');
-const credentials = {key: privateKey, cert: certificate};
+const credentials = {key: privateKey, cert: certificate};	// TODO: need to get the certificate authority (CA) file. likely named chain.pem. Then replace this line with the line below
+//const CA = fs.readFileSync('auth/chain.pem', 'utf8');
+//const credentials = {key: privateKey, cert: certificate, ca: CA};
+
+ 
  
 const secrets = require("auth/client_secrets.json");
 let ytcode = null

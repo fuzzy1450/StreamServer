@@ -153,7 +153,7 @@ const ftpServer = new FtpSrv({
 });
 
 const camNumMap = { // a map of each camera's channel # to it's pulse handler
-	"00": new PulseHandler("PH_Pool_6"),
+	"00": new PulseHandler("PH_Pool_6"),	// TODO: Auto-generate this from Cameras.json
 	"01": new PulseHandler("PH_Pool_3"),
 	"02": new PulseHandler("PH_Pool_5"),
 	"03": new PulseHandler("PH_Pool_4"),
